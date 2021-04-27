@@ -22,13 +22,17 @@ public class Punkt {
                 + Math.pow((andererPunkt.getY() - getY()), 2));
     }
 
-    public void setXY(int neuX, int neuY) {
-        this.x = neuX;
-        this.y = neuY;
+    public void setXY(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
     public void bewegeUm(int dx, int dy) {
         this.x += dx;
         this.y += dy;
+    }
+    public void bewegeUm(Punkt punkt){
+        this.x = punkt.getX();
+        this.y = punkt.getY();
     }
 
     public void ausgabeAttribute() {

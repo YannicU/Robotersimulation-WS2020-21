@@ -1,10 +1,11 @@
+import java.awt.Color;
+
 /**
  * Beschreiben Sie hier die Klasse Rechteck.
  *
  * @author Yannic Yu
- * @version V1 26.04.2021
+ * @version V9999999 26.04.2021
  */
-import java.awt.Color;
 
 public class Rechteck {
     private Punkt position = new Punkt(0, 0);
