@@ -3,7 +3,7 @@ import java.awt.Color;
 /**
  * Beschreiben Sie hier die Klasse Rechteck.
  *
- * @author Yannic Yu
+ * @author Yannic Yu Vivian
  * @version V9999999 26.04.2021
  */
 
