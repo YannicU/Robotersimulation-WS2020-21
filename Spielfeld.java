@@ -21,7 +21,7 @@ public class Spielfeld {
 
     /**
      *  Methode punktEingabe
-     *  
+     *
      * Die zuvor angegebene Anzahl der Punkte wird als obere Grenze des loops verwendet.
      * In dem loop gibt der Nutzer die x und y Werte der Punkte an.
      * Diese werden mithilfe einer anderen Methode ("checkGrenzen") auf ihre Grenzen geprüft.
@@ -113,11 +113,11 @@ public class Spielfeld {
      * es wird ein neuer Punkt naechsterPunkt erzeugt, der angibt, welchen Punkt der Roboter als nächstes anfahren kann.
      * Dieser wird nur dann erzeugt, wenn es nicht der Roboterpunkt selbst ist und er nicht schon vom Roboter angefahren
      * wurde.
-     * Das wird geprüft, indem der erzeugten naechstenPunkt in dem leeren Array poiAbgefahren gespeichert wird und 
+     * Das wird geprüft, indem der erzeugten naechstenPunkt in dem leeren Array poiAbgefahren gespeichert wird und
      * zukünftig ausgeschlossen wird.
      * Sobald ein naechsterPunkt erzeugt wurde, wird von ihm der Verschiebungsvektor ausgerechnet und der Roboterpunkt
-     * um diesen verschoben. 
-     * Dann werden die Punkte aus dem Array poiSortiert erneut mit den neuen Koordinaten des Roboterpunktes, nach ihrem 
+     * um diesen verschoben.
+     * Dann werden die Punkte aus dem Array poiSortiert erneut mit den neuen Koordinaten des Roboterpunktes, nach ihrem
      * sortiert kürzesten Abstand sortiert.
      */
     public void poiAbfahren(){
@@ -146,11 +146,10 @@ public class Spielfeld {
             int dx = naechsterPunkt.getX() - roboter.getX();
             int dy = naechsterPunkt.getY() - roboter.getY();
 
-            System.out.println("---\nnächster Punkt = Punkt" + (getIndex(poi, naechsterPunkt) + 1) +
-                    " (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
+            System.out.println("---\nnächster Punkt = Punkt (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
                     ")\nVerschiebungsvektor: (" + dx + ", " + dy + ") = " +
                     roboter.getAbstand(naechsterPunkt));
-
+            
             roboter.bewegeUm(dx, dy);
             poiSortieren(poiSortiert);
 
