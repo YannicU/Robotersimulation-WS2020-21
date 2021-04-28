@@ -17,10 +17,16 @@ public class Spielfeld {
     private final Punkt roboter = new Punkt(0, 0);
     private final Scanner scanner = new Scanner(System.in);
 
-
     Spielfeld () {}
 
-
+    /**
+     *  Methode punktEingabe
+     *  
+     * Die zuvor angegebene Anzahl der Punkte wird als obere Grenze des loops verwendet.
+     * In dem loop gibt der Nutzer die x und y Werte der Punkte an.
+     * Diese werden mithilfe einer anderen Methode ("checkGrenzen") auf ihre Grenzen geprüft.
+     * Sollten die Grenzen nicht stimmen, muss der Nutzer die Werte für den aktuellen Punkt erneut eingeben.
+     */
     private Punkt[] punktEingabe() {
         System.out.println("Anzahl der Punkte: ");
         int punktAnzahl = scanner.nextInt(); // Nutzer gibt an wie viele Punkte er erstellen möchte
@@ -85,8 +91,8 @@ public class Spielfeld {
      */
     private void poiSortieren (Punkt[] poi){
         HashMap<Punkt, Double> poiUnsortiert = new HashMap<>();
-        Punkt bvc = new Punkt(poiUnsortiert);
-        TreeMap<Punkt, Double> poiSortiert = new TreeMap<>(bvc);
+        Punkt baseToCompare = new Punkt(poiUnsortiert);
+        TreeMap<Punkt, Double> poiSortiert = new TreeMap<>(baseToCompare);
         this.poiSortiert = new Punkt[this.poi.length];
 
         for (Punkt punkt : poi) {
@@ -101,12 +107,24 @@ public class Spielfeld {
         }
     }
 
+    /**
+     * Methode poiAbfahren
+     *
+     * es wird ein neuer Punkt naechsterPunkt erzeugt, der angibt, welchen Punkt der Roboter als nächstes anfahren kann.
+     * Dieser wird nur dann erzeugt, wenn es nicht der Roboterpunkt selbst ist und er nicht schon vom Roboter angefahren
+     * wurde.
+     * Das wird geprüft, indem der erzeugten naechstenPunkt in dem leeren Array poiAbgefahren gespeichert wird und 
+     * zukünftig ausgeschlossen wird.
+     * Sobald ein naechsterPunkt erzeugt wurde, wird von ihm der Verschiebungsvektor ausgerechnet und der Roboterpunkt
+     * um diesen verschoben. 
+     * Dann werden die Punkte aus dem Array poiSortiert erneut mit den neuen Koordinaten des Roboterpunktes, nach ihrem 
+     * sortiert kürzesten Abstand sortiert.
+     */
     public void poiAbfahren(){
         poiSortieren(punktEingabe());
         Punkt[] poiAbgefahren = new Punkt[poi.length];
         Punkt naechsterPunkt = new Punkt();
         for (int i = 0; i < poiSortiert.length; i++) {
-            poiSortieren(poiSortiert);
             boolean neuerPunkt = false;
             for (Punkt punkt : poiSortiert) {
                 if (!poiSortiert[0].equals(new Punkt(0,0)) && !neuerPunkt && !Arrays.asList(poiAbgefahren).contains(punkt)) {
@@ -128,8 +146,8 @@ public class Spielfeld {
             int dx = naechsterPunkt.getX() - roboter.getX();
             int dy = naechsterPunkt.getY() - roboter.getY();
 
-            System.out.println("---\nnächster Punkt = Punkt" + (getIndex(poi, naechsterPunkt) + 1) + 
-                    " (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() + 
+            System.out.println("---\nnächster Punkt = Punkt" + (getIndex(poi, naechsterPunkt) + 1) +
+                    " (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
                     ")\nVerschiebungsvektor: (" + dx + ", " + dy + ") = " +
                     roboter.getAbstand(naechsterPunkt));
 
@@ -139,11 +157,7 @@ public class Spielfeld {
             System.out.println("...Neuer Ausganspunkt: (" + roboter.getX() + ", " + roboter.getY() + ")\n----------");
         }
     }
-    private <T> int getIndex(T[] arr, T val) { // vorsicht ist geklaut! ist am ende aber auch nicht mehr wichtig.
+    private <T> int getIndex(T[] arr, T val) { // vorsicht ist geklaut! ist für den code aber auch nicht wichtig.
         return Arrays.asList(arr).indexOf(val);
     }
 }
-
-
-
-
