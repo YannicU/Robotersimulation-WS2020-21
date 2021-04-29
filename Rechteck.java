@@ -3,93 +3,134 @@ import java.awt.Color;
 /**
  * Beschreiben Sie hier die Klasse Rechteck.
  *
- * @author Yannic Yu, Vivian
- * @version V152874 26.04.2021
+ * @author Yannic Yu
+ * @version 29.04.2021
  */
 
 public class Rechteck {
-    private Punkt position = new Punkt(0, 0);
+    private Punkt position;
     private int breite = 0;
     private int laenge = 0;
     private String bezeichnung;
     private Color farbe;
-    /*
-     * Hier folgen die Konstruktoren
-     */
-    Rechteck(){}
-    Rechteck(Punkt position, int breite, int laenge, String bezeichnung, Color farbe) {
+
+    Rechteck() {
+    }
+
+    Rechteck(Punkt position, int laenge, int breite, String bezeichnung, Color farbe) {
         this.position = position;
-        this.breite = breite;
         this.laenge = laenge;
+        this.breite = breite;
         this.bezeichnung = bezeichnung;
         checkFarbe(farbe);
     }
-    /*
-     * Hier folgen die "get" Methoden
-     */
+
+    private Punkt getPosition() {
+        return position;
+    }
+
     public int getPositionX() {
-        return this.position.getX();
+        return position.getX();
     }
+
     public int getPositionY() {
-        return this.position.getY();
+        return position.getY();
     }
-    public int getBreite() {
-        return this.breite;
-    }
+
     public int getLaenge() {
-        return this.laenge;
+        return laenge;
     }
+
+    public int getBreite() {
+        return breite;
+    }
+
     public String getBezeichnung() {
-        return this.bezeichnung;
+        return bezeichnung;
     }
-    public Color getColor() {
-        return this.farbe;
+
+    public String getColor() {
+        return "red = " + farbe.getRed() + ", green = " + farbe.getGreen() + ", blue = " + farbe.getBlue();
     }
-    /*
-     * Hier folgen die "set" Methoden
-     */
-    public void setPosition(Punkt position) {
+
+    private void setPosition(Punkt position) {
         this.position = position;
     }
-    public void setPosition(int x, int y) {
-        this.position.setXY(x, y);
+
+    private void setPosition(int x, int y) {
+        position.setXY(x, y);
     }
-    public void setBreite(int breite) {
-        this.breite = breite;
-    }
-    public void setLaenge(int laenge) {
+
+    private void setLaenge(int laenge) {
         this.laenge = laenge;
     }
-    public void setBezeichnung(String bezeichnung) {
+
+    private void setBreite(int breite) {
+        this.breite = breite;
+    }
+
+    private void setBezeichnung(String bezeichnung) {
         this.bezeichnung = bezeichnung;
     }
-    public void setColor(Color farbe) {
+
+    private void setColor(Color farbe) {
         checkFarbe(farbe);
     }
 
     private void checkFarbe(Color farbe) {
-        // überprüft ob die eingegebene Farbe weiß ist.
-        // Falls ja, wird keine Farbe generiert und eine Fehlermeldung an die Konsole gegeben.
         if (farbe == Color.white) {
-            System.out.println("Farbe darf nicht weiß sein!");
-            this.farbe = null;
+            System.out.println("Farbe darf nicht weiß sein! Farbe wurde automatisch als grau fesgelegt");
+            this.farbe = Color.gray;
         } else {
             this.farbe = farbe;
         }
     }
 
     public void bewegeUm(int dx, int dy) {
-        this.position.bewegeUm(dx, dy);
+        position.bewegeUm(dx, dy);
     }
+
     public void bewegeUm(Punkt verschiebevektor) {
-        this.position.bewegeUm(verschiebevektor.getX(), verschiebevektor.getY());
+        position.bewegeUm(verschiebevektor.getX(), verschiebevektor.getY());
     }
 
     public void ausgabeAttribute() {
-        System.out.println("\nPosition: x = " + getPositionX() + ", y = " + getPositionY() +
+        System.out.println("Position: x = " + getPositionX() + ", y = " + getPositionY() +
                 "\nBreite: " + getBreite() + " px" +
                 "\nLänge: " + getLaenge() + " px" +
                 "\nBezeichnung: " + getBezeichnung() +
                 "\nColor: " + getColor());
+    }
+
+    public boolean ueberlappt(Rechteck r) {
+        int dx = r.getPositionX() - getPositionX();
+        int dy = r.getPositionY() - getPositionY();
+        if (getPositionX() <= r.getPositionX() && getPositionY() <= r.getPositionY()) { // I. Quadrant
+            if (dx <= laenge) {
+                return dy <= r.breite;
+            } else {
+                return false;
+            }
+        } else if (getPositionX() >= r.getPositionX() && getPositionY() <= r.getPositionY()) { // II. Quadrant
+            if (dx <= r.laenge) {
+                return dy <= r.breite;
+            } else {
+                return false;
+            }
+        } else if (getPositionX() >= r.getPositionX() && getPositionY() >= r.getPositionY()) { // III. Quadrant
+            if (dy <= breite) {
+                return dx <= r.laenge;
+            } else {
+                return false;
+            }
+        } else if (getPositionX() <= r.getPositionX() && getPositionY() >= r.getPositionY()) { // IV. Quadrant
+            if (dy <= breite) {
+                return dx <= laenge;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 }
