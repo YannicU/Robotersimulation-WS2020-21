@@ -8,9 +8,9 @@ import java.util.Map;
  * @version 29.04.2021
  */
 public class Punkt implements Comparator<Punkt> {
+    Map<Punkt, Double> base;
     private int x = 0;
     private int y = 0;
-    Map<Punkt, Double> base; // hängt mit Zeile 21. zusammen
 
     Punkt() {
     }
@@ -25,16 +25,11 @@ public class Punkt implements Comparator<Punkt> {
     }
 
     public int getX() {
-        return this.x;
+        return x;
     }
 
     public int getY() {
-        return this.y;
-    }
-
-    public double getAbstand(Punkt andererPunkt) {
-        return Math.sqrt(Math.pow((andererPunkt.getX() - getX()), 2)
-                + Math.pow((andererPunkt.getY() - getY()), 2));
+        return y;
     }
 
     public void setXY(int x, int y) {
@@ -43,13 +38,13 @@ public class Punkt implements Comparator<Punkt> {
     }
 
     public void bewegeUm(int dx, int dy) {
-        this.x += dx;
-        this.y += dy;
+        x += dx;
+        y += dy;
     }
 
-    public void bewegeUm(Punkt punkt) {
-        this.x = punkt.getX();
-        this.y = punkt.getY();
+    public double getAbstand(Punkt andererPunkt) {
+        return Math.sqrt(Math.pow((andererPunkt.getX() - getX()), 2)
+            + Math.pow((andererPunkt.getY() - getY()), 2));
     }
 
     public void ausgabeAttribute() {
