@@ -15,7 +15,7 @@ public class Roboter {
     }
 
     void spracherkennung() {
-        System.out.println("Schreibe 'Start' um zu starten, 'Ende' um zu beenden");
+        System.out.print("Schreibe 'Start' um zu starten, 'Ende' um zu beenden\n> ");
         String userEingabe = scanner.nextLine().toUpperCase();
         if (userEingabe.equalsIgnoreCase("start")) {
             System.out.println("...Tagchen, wie kann ich dir Helfen?");
@@ -30,29 +30,37 @@ public class Roboter {
                             switch (Stichwort.valueOf(wort)) {
                                 case NAME:
                                 case BEZEICHNUNG:
-                                    System.out.println("Cooler Typ");
+                                    System.out.println("Seppi");
                                     break;
                                 case FARBE:
-                                    System.out.println("Farbe");
+                                    System.out.println("Weiß ich auch nicht :(");
                                     break;
                                 case POSITION:
                                 case KOORDINATEN:
                                 case PUNKT:
-                                    System.out.println("Position");
+                                    System.out.println("Irgendwo im Nirgendwo");
                                     break;
                                 case LANG:
                                 case LAENGE:
-                                    System.out.println("Länge");
+                                    System.out.println("seeehr laaaang");
                                     break;
                                 case BREIT:
                                 case BREITE:
-                                    System.out.println("Breite");
+                                    System.out.println("Ich bin nich nur breit, sondern auch dicht... lol.");
                                     break;
                                 case DANKE:
                                     System.out.println("Kein ding");
                                     break;
                                 case GERNE:
-                                    System.out.println("So höflich");
+                                    System.out.println("Wow! So höflich");
+                                    break;
+                                case HALLO:
+                                case WIEDERSEHEN:
+                                case TSCHUESS:
+                                    System.out.println("Sers!");
+                                    break;
+                                case NICHT:
+                                    System.out.println("Okay..");
                                     break;
                             }
                         } catch (IllegalArgumentException illegalArgumentException) {
@@ -64,8 +72,6 @@ public class Roboter {
         } else if (!userEingabe.equalsIgnoreCase("ende")) {
             System.out.println("Wie bitte?");
             spracherkennung();
-        } else {
-            System.out.println("Tschüssie");
         }
     }
 
@@ -82,5 +88,9 @@ public class Roboter {
         BREITE,
         DANKE,
         GERNE,
+        HALLO,
+        WIEDERSEHEN,
+        TSCHUESS,
+        NICHT,
     }
 }

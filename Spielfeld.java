@@ -28,7 +28,8 @@ public class Spielfeld {
         System.out.println("Hey, was willst du machen?" +
                 "\n  (a) Points-of-Interest abfahren" +
                 "\n  (b) Hindernisse umfahren" +
-                "\n  (c) Stichwörter erkennen und antworten");
+                "\n  (c) Stichwörter erkennen und antworten" +
+                "\n  - Tippe 'ende', um Programm zu beenden");
         String userEingabe = "";
         while (!userEingabe.equalsIgnoreCase("ende")) {
             System.out.print("(a/b/c) > ");
@@ -53,15 +54,12 @@ public class Spielfeld {
      */
     private static Punkt[] punktEingabe() {
         System.out.print("Anzahl der Punkte: ");
-        int punktAnzahl = scanner.nextInt(); // Nutzer gibt an wie viele Punkte er erstellen möchte
+        int punktAnzahl = eingabeIstZahl("Anzahl der Punkte: "); // Nutzer gibt an wie viele Punkte er erstellen möchte
         userPoi = new Punkt[punktAnzahl]; // werden hier gespeichert!
 
         for (int i = 0; i < punktAnzahl; i++) {
-            System.out.println("Koordinaten von P" + (i + 1) + ": ");
+            System.out.println("Koordinaten von P" + (i + 1) + " (x, y): ");
             userPunktEingabe();
-            while (!checkGrenzen(x, y)) { // solange checkGrenzen false gibt, müssen werte erneut eingegeben werden
-                userPunktEingabe();
-            }
             Punkt neuerPunkt = new Punkt(x, y); // neuer Punkt wird erstellt, der die eingegebenen Werte besitzt
 
             System.out.println("==> P" + (i + 1) + "(" + neuerPunkt.getX() + ", " + neuerPunkt.getY() + ")");
@@ -73,9 +71,32 @@ public class Spielfeld {
 
     private static void userPunktEingabe() {
         System.out.print("x: ");
-        x = scanner.nextInt();
+        x = eingabeIstZahl("x: ");
         System.out.print("y: ");
-        y = scanner.nextInt();
+        y = eingabeIstZahl("y: ");
+        while (!checkGrenzen(x, y)) {
+            System.out.print("x: ");
+            x = eingabeIstZahl("x: ");
+            System.out.print("y: ");
+            y = eingabeIstZahl("y: ");
+        }
+    }
+
+    private static int eingabeIstZahl(String bezeichnung) {
+        int zahl = 0;
+        boolean isZahl = false;
+        while (!isZahl) {
+            String eingabe = scanner.nextLine();
+            try {
+                zahl = Integer.parseInt(eingabe);
+                isZahl = true;
+            } catch (NumberFormatException numberFormatException) {
+                System.out.println("-----ERROR: Nur Zahlen eingeben");
+                System.out.print(bezeichnung);
+                isZahl = false;
+            }
+        }
+        return zahl;
     }
 
     private static boolean checkGrenzen(int x, int y) {
@@ -195,7 +216,8 @@ public class Spielfeld {
      */
     public ArrayList<Rechteck> hindernislisteErzeugen() {
         System.out.print("Anzahl der Hindernisse: ");
-        int hindernisseAnzahl = scanner.nextInt(); // Nutzereingabe um Anzahl der Hindernisse festzulegen
+        // Nutzereingabe um Anzahl der Hindernisse festzulegen
+        int hindernisseAnzahl = eingabeIstZahl("Anzahl der Hindernisse: ");
         ArrayList<Rechteck> hindernisliste = new ArrayList<>(); // hier werden die Hindernisse gespeichert werden
 
         float r = ZUFALLSGENERATOR.nextFloat(); // zufällige r, g, b Werte für die Farbe
