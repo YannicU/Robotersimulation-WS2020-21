@@ -5,42 +5,21 @@ import java.awt.Color;
  * Beschreiben Sie hier die Klasse Spielfeld.
  *
  * @author Yannic Yu
- * @version 30.04.2021
+ * @version 29.04.2021
  */
 
 public class Spielfeld {
     private static final Random ZUFALLSGENERATOR = new Random();
-    private static Punkt roboterPunkt = new Punkt();
-    private static Scanner scanner = new Scanner(System.in);
-    private static int laenge = 1000;
-    private static int breite = 1000;
-    private static int x;
-    private static int y;
-    private static Punkt[] userPoi;
-    private static Punkt[] poiSortiert;
+    private final Punkt roboter = new Punkt();
+    private final Scanner SCANNER = new Scanner(System.in);
+    private int laenge = 1000;
+    private int breite = 1000;
+    private int x;
+    private int y;
+    private Punkt[] poi;
+    private Punkt[] poiSortiert;
 
     Spielfeld() {
-        Roboter roboter = new Roboter();
-    }
-
-    public static void main(String[] args) {
-        Roboter roboter = new Roboter();
-        System.out.println("Hey, was willst du machen?" +
-                "\n  (a) Points-of-Interest abfahren" +
-                "\n  (b) Hindernisse umfahren" +
-                "\n  (c) Stichwörter erkennen und antworten");
-        String userEingabe = "";
-        while (!userEingabe.equalsIgnoreCase("ende")) {
-            System.out.print("(a/b/c) > ");
-            userEingabe = scanner.nextLine();
-            if (userEingabe.equalsIgnoreCase("a")) {
-                poiAbfahren();
-            } else if (userEingabe.equalsIgnoreCase("b")) {
-                System.out.println("...Ist noch in bearbeitung");
-            } else if (userEingabe.equalsIgnoreCase("c")) {
-                roboter.spracherkennung();
-            }
-        }
     }
 
     /**
@@ -51,10 +30,10 @@ public class Spielfeld {
      * Diese werden mithilfe einer anderen Methode ("checkGrenzen") auf ihre Grenzen geprüft.
      * Sollten die Grenzen nicht stimmen, muss der Nutzer die Werte für den aktuellen Punkt erneut eingeben.
      */
-    private static Punkt[] punktEingabe() {
+    private Punkt[] punktEingabe() {
         System.out.print("Anzahl der Punkte: ");
-        int punktAnzahl = scanner.nextInt(); // Nutzer gibt an wie viele Punkte er erstellen möchte
-        userPoi = new Punkt[punktAnzahl]; // werden hier gespeichert!
+        int punktAnzahl = SCANNER.nextInt(); // Nutzer gibt an wie viele Punkte er erstellen möchte
+        poi = new Punkt[punktAnzahl]; // werden hier gespeichert!
 
         for (int i = 0; i < punktAnzahl; i++) {
             System.out.println("Koordinaten von P" + (i + 1) + ": ");
@@ -66,19 +45,19 @@ public class Spielfeld {
 
             System.out.println("==> P" + (i + 1) + "(" + neuerPunkt.getX() + ", " + neuerPunkt.getY() + ")");
 
-            userPoi[i] = neuerPunkt; // neuer Punkt wird zum Array hinzugefügt
+            poi[i] = neuerPunkt; // neuer Punkt wird zum Array hinzugefügt
         }
-        return userPoi;
+        return poi;
     }
 
-    private static void userPunktEingabe() {
+    private void userPunktEingabe() {
         System.out.print("x: ");
-        x = scanner.nextInt();
+        x = SCANNER.nextInt();
         System.out.print("y: ");
-        y = scanner.nextInt();
+        y = SCANNER.nextInt();
     }
 
-    private static boolean checkGrenzen(int x, int y) {
+    private boolean checkGrenzen(int x, int y) {
         if (x < 0 || x > breite) {
             System.out.println("x-Wert liegt ausehalb des engegebenen Bereichs (0 <= x <= " + breite + ")");
             return false;
@@ -113,20 +92,20 @@ public class Spielfeld {
      * Dann werden die values aus der TreeMap poiSortiert in dem Array poiSortiert gespeichert, weil ich nicht
      * wusste wie man mit der TreeMap weiter gehen sollte.
      */
-    private static void poiSortieren(Punkt[] poi) {
+    private void poiSortieren(Punkt[] poi) {
         HashMap<Punkt, Double> poiUnsortiert = new HashMap<>();
         Punkt basisZumVergleichen = new Punkt(poiUnsortiert);
-        TreeMap<Punkt, Double> poiSortiertTM = new TreeMap<>(basisZumVergleichen);
-        poiSortiert = new Punkt[userPoi.length];
+        TreeMap<Punkt, Double> poiSortiert = new TreeMap<>(basisZumVergleichen);
+        this.poiSortiert = new Punkt[this.poi.length];
 
         for (Punkt punkt : poi) {
-            poiUnsortiert.put(punkt, roboterPunkt.getAbstand(punkt));
+            poiUnsortiert.put(punkt, roboter.getAbstand(punkt));
         }
-        poiSortiertTM.putAll(poiUnsortiert);
+        poiSortiert.putAll(poiUnsortiert);
 
         int i = 0; // speichert die sortierten Punkte im Array this.poiSortiert
-        for (Punkt punkt : poiSortiertTM.keySet()) {
-            poiSortiert[i] = punkt;
+        for (Punkt punkt : poiSortiert.keySet()) {
+            this.poiSortiert[i] = punkt;
             i++;
         }
     }
@@ -144,9 +123,9 @@ public class Spielfeld {
      * Dann werden die Punkte aus dem Array poiSortiert erneut mit den neuen Koordinaten des Roboterpunktes, nach ihrem
      * sortiert kürzesten Abstand sortiert.
      */
-    public static void poiAbfahren() {
+    public void poiAbfahren() {
         poiSortieren(punktEingabe());
-        Punkt[] poiAbgefahren = new Punkt[userPoi.length];
+        Punkt[] poiAbgefahren = new Punkt[poi.length];
         Punkt naechsterPunkt = new Punkt();
         for (int i = 0; i < poiSortiert.length; i++) {
             boolean neuerPunkt = false;
@@ -161,27 +140,27 @@ public class Spielfeld {
                 }
             }
             // ab hier wird viel an die Konsole geschrieben und der Roboter zum nächsten Punkt bewegt
-            System.out.println("Ausgangspunkt: (" + roboterPunkt.getX() + ", " + roboterPunkt.getY() + ")");
+            System.out.println("Ausgangspunkt: (" + roboter.getX() + ", " + roboter.getY() + ")");
             for (Punkt punkte : poiSortiert) {
-                System.out.println("Abstand zu Punkt" + (getIndex(userPoi, punkte) + 1) + " (" + punkte.getX() + ", " +
-                        punkte.getY() + ") = " + roboterPunkt.getAbstand(punkte));
+                System.out.println("Abstand zu Punkt" + (getIndex(poi, punkte) + 1) + " (" + punkte.getX() + ", " +
+                    punkte.getY() + ") = " + roboter.getAbstand(punkte));
             }
 
-            int dx = naechsterPunkt.getX() - roboterPunkt.getX();
-            int dy = naechsterPunkt.getY() - roboterPunkt.getY();
+            int dx = naechsterPunkt.getX() - roboter.getX();
+            int dy = naechsterPunkt.getY() - roboter.getY();
 
             System.out.println("---\nnächster Punkt = Punkt (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
-                    ")\nVerschiebungsvektor: (" + dx + ", " + dy + ") = " +
-                    roboterPunkt.getAbstand(naechsterPunkt));
+                ")\nVerschiebungsvektor: (" + dx + ", " + dy + ") = " +
+                roboter.getAbstand(naechsterPunkt));
 
-            roboterPunkt.bewegeUm(dx, dy);
+            roboter.bewegeUm(dx, dy);
             poiSortieren(poiSortiert);
 
-            System.out.println("...Neuer Ausganspunkt: (" + roboterPunkt.getX() + ", " + roboterPunkt.getY() + ")\n----------");
+            System.out.println("...Neuer Ausganspunkt: (" + roboter.getX() + ", " + roboter.getY() + ")\n----------");
         }
     }
 
-    private static <T> int getIndex(T[] arr, T val) { // vorsicht ist geklaut! ist für den code aber auch nicht wichtig.
+    private <T> int getIndex(T[] arr, T val) { // vorsicht ist geklaut! ist für den code aber auch nicht wichtig.
         return Arrays.asList(arr).indexOf(val);
     }
 
@@ -195,7 +174,7 @@ public class Spielfeld {
      */
     public ArrayList<Rechteck> hindernislisteErzeugen() {
         System.out.print("Anzahl der Hindernisse: ");
-        int hindernisseAnzahl = scanner.nextInt(); // Nutzereingabe um Anzahl der Hindernisse festzulegen
+        int hindernisseAnzahl = SCANNER.nextInt(); // Nutzereingabe um Anzahl der Hindernisse festzulegen
         ArrayList<Rechteck> hindernisliste = new ArrayList<>(); // hier werden die Hindernisse gespeichert werden
 
         float r = ZUFALLSGENERATOR.nextFloat(); // zufällige r, g, b Werte für die Farbe
@@ -219,7 +198,7 @@ public class Spielfeld {
         while (hindernisliste.size() < hindernisseAnzahl && ueberlappungZaehler < 50) { // Hier werden zufällige Hindernisse erzeugt.
             zufallsPunkt = new Punkt(zufallszahl(1, (laenge - 1)), zufallszahl(1, (breite - 1)));
             zufallsRechteck = new Rechteck(zufallsPunkt, zufallszahl(1, 100), zufallszahl(1, 100),
-                    "Rechteck " + i, new Color(r, g, b));
+                "Rechteck " + i, new Color(r, g, b));
             // wrid nur dann ausgeführt, wenn das zufallsRechteck die Grenzen des Spielfeldes nicht überschreitet/berührt
             if ((laenge - zufallsPunkt.getX()) < zufallsRechteck.getLaenge() || (breite - zufallsPunkt.getY()) < zufallsRechteck.getBreite()) {
                 for (int j = 0; j < hindernisliste.size(); j++) {
