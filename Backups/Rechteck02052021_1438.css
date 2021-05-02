@@ -5,14 +5,14 @@ import java.util.Random;
  * Beschreiben Sie hier die Klasse Rechteck.
  *
  * @author Yannic Yu
- * @version 01.05.2021
+ * @version 29.04.2021
  */
 
 public class Rechteck {
     private static final Random ZUFALLSGENERATOR = new Random();
     private Punkt position;
-    private int breite;
-    private int laenge;
+    private int breite = 0;
+    private int laenge = 0;
     private String bezeichnung;
     private Color farbe;
 
@@ -35,7 +35,7 @@ public class Rechteck {
             this.farbe = new Color(r, g, b);
             checkFarbe(this.farbe);
             System.out.println("Farbe darf nicht weiß sein! Farbe wurde zufällig gewählt: " +
-                    "(r = " + this.farbe.getRed() + ", g = " + this.farbe.getGreen() + ", b = " + this.farbe.getBlue());
+                "(r = " + this.farbe.getRed() + ", g = " + this.farbe.getGreen() + ", b = " + this.farbe.getBlue());
         } else {
             this.farbe = farbe;
         }
@@ -81,17 +81,12 @@ public class Rechteck {
         this.bezeichnung = bezeichnung;
     }
 
-    public Color getColor() {
-        return farbe;
-//        return "red = " + farbe.getRed() + ", green = " + farbe.getGreen() + ", blue = " + farbe.getBlue();
+    public String getColor() {
+        return "red = " + farbe.getRed() + ", green = " + farbe.getGreen() + ", blue = " + farbe.getBlue();
     }
 
     public void setColor(Color farbe) {
         checkFarbe(farbe);
-    }
-
-    public void setColor(float r, float g, float b) {
-        checkFarbe(new Color(r, g, b));
     }
 
     public void bewegeUm(int dx, int dy) {
@@ -104,18 +99,47 @@ public class Rechteck {
 
     public void ausgabeAttribute() {
         System.out.println("Position: x = " + getPositionX() + ", y = " + getPositionY() +
-                "\nBreite: " + getBreite() + " px" +
-                "\nLänge: " + getLaenge() + " px" +
-                "\nBezeichnung: " + getBezeichnung() +
-                "\nColor: " + getColor());
+            "\nBreite: " + getBreite() + " px" +
+            "\nLänge: " + getLaenge() + " px" +
+            "\nBezeichnung: " + getBezeichnung() +
+            "\nColor: " + getColor());
     }
 
     public boolean ueberlappt(Rechteck r) {
-        // aktuelles Rechteck = R1
+        // zu erzeugende Rechteck = R1, Linke obere Ecke liegt im Koordinaten Ursprung
         // Rechteck r = R2
         int dx = r.getPositionX() - getPositionX();
         int dy = r.getPositionY() - getPositionY();
-        // wahr für: längeR1 < dx < -längeR2, breiteR1 < dy < -breiteR2
-        return laenge >= dx && dx >= -r.getLaenge() && breite >= dy && dy >= -r.getBreite();
+        if (getPositionX() <= r.getPositionX() && getPositionY() <= r.getPositionY()) { // I. Quadrant
+            // Das Prinzip:
+            if (dx <= laenge) { // Wenn der x-Abstand von R1 zu R2 kleiner ist als die Länge von R1
+                return dy <= r.breite; // Wenn der y-Abstand von R1 zu R2 kleiner ist als die Breite von R2
+            } else {
+                // Wenn im I. Quadrant der x-Abstand von R1 zu R2 größer ist als die Länge von R1,
+                // werden sie sich nie schneiden
+                return false;
+            }
+            // Selbe Denkweise in den anderen Quadranten.
+        } else if (getPositionX() >= r.getPositionX() && getPositionY() <= r.getPositionY()) { // II. Quadrant
+            if (dx <= r.laenge) {
+                return dy <= r.breite;
+            } else {
+                return false;
+            }
+        } else if (getPositionX() >= r.getPositionX() && getPositionY() >= r.getPositionY()) { // III. Quadrant
+            if (dy <= breite) {
+                return dx <= r.laenge;
+            } else {
+                return false;
+            }
+        } else if (getPositionX() <= r.getPositionX() && getPositionY() >= r.getPositionY()) { // IV. Quadrant
+            if (dy <= breite) {
+                return dx <= laenge;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 }
