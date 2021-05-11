@@ -35,7 +35,7 @@ public class Rechteck {
             this.farbe = new Color(r, g, b);
             checkFarbe(this.farbe);
             System.out.println("Farbe darf nicht weiß sein! Farbe wurde zufällig gewählt: " +
-                    "(r = " + this.farbe.getRed() + ", g = " + this.farbe.getGreen() + ", b = " + this.farbe.getBlue()+ ")" );
+                    "(r = " + this.farbe.getRed() + ", g = " + this.farbe.getGreen() + ", b = " + this.farbe.getBlue() + ")" );
         } else {
             this.farbe = farbe;
         }
