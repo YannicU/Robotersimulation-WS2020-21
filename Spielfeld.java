@@ -5,7 +5,7 @@ import java.awt.Color;
  * Beschreiben Sie hier die Klasse Spielfeld.
  *
  * @author Yannic Yu
- * @version 01.05.2021
+ * @version 11.05.2021
  */
 
 public class Spielfeld {
@@ -17,18 +17,10 @@ public class Spielfeld {
     private static int x;
     private static int y;
     private static Punkt[] userPoi;
-    private static Punkt[] poiSortiert;
-
-    public int getLaenge() {
-        return LAENGE;
-    }
-    public int getBreite() {
-        return BREITE;
-    }
+    private static Punkt[] poiArraySortiert;
 
     Spielfeld() {
-//        Roboter roboter = new Roboter();
-//        Leinwand leinwand;
+        Roboter roboter = new Roboter();
     }
 
     public static void main(String[] args) {
@@ -45,7 +37,10 @@ public class Spielfeld {
             if (userEingabe.equalsIgnoreCase("a")) {
                 poiAbfahren();
             } else if (userEingabe.equalsIgnoreCase("b")) {
-                System.out.println("...in bearbeitung");
+                Leinwand leinwand = new Leinwand(LAENGE, BREITE);
+                while (true) {
+                    Leinwand.Zeichenflaeche zeichenflaeche = new Leinwand.Zeichenflaeche();
+                }
             } else if (userEingabe.equalsIgnoreCase("c")) {
                 roboter.spracherkennung();
             }
@@ -67,7 +62,7 @@ public class Spielfeld {
 
         for (int i = 0; i < punktAnzahl; i++) {
             System.out.println("Koordinaten von P" + (i + 1) + " (x, y): ");
-            userPunktEingabe();
+            userPunktEingabe(); // neue Nutzereingabe wird gefordert
             Punkt neuerPunkt = new Punkt(x, y); // neuer Punkt wird erstellt, der die eingegebenen Werte besitzt
 
             System.out.println("==> P" + (i + 1) + "(" + neuerPunkt.getX() + ", " + neuerPunkt.getY() + ")");
@@ -90,7 +85,8 @@ public class Spielfeld {
         }
     }
 
-    private static int eingabeIstZahl(String bezeichnung) { // parameter ist eigentlich nicht so wichtig, sieht am ende aber besser aus
+    // überprüft nur ob die Eingabe auch eine Zahl ist. Sonst kommt eine Fehlermeldung
+    private static int eingabeIstZahl(String bezeichnung) { // geforderter Parameter ist eigentlich nicht so wichtig, sieht am Ende aber besser aus
         int zahl = 0;
         boolean isZahl = false;
         while (!isZahl) {
@@ -107,6 +103,7 @@ public class Spielfeld {
         return zahl;
     }
 
+    // überprüft ob die eingegebenen Koordinaten auch innerhalb des definierten Bereichs liegen
     private static boolean checkGrenzen(int x, int y) {
         if (x < 0 || x > BREITE) {
             System.out.println("x-Wert liegt ausehalb des engegebenen Bereichs (0 <= x <= " + BREITE + ")");
@@ -123,41 +120,31 @@ public class Spielfeld {
     /**
      * Methode poiSortieren
      * <p>
-     * Hier werden die unsortierten Punkte ihrem Abstand nach sortiert und einem neuen Array (this.poiSortiert)
-     * hinzugefügt um die sortierten Punkte zu speichern
+     * Die Methode benötigt ein Array "poi". Die Punkte in dem Array "poi" werden nach ihrem Abstand zum
+     * Roboterpunkt aufsteigend sortiert.
      * <p>
-     * keine Ahnung was eine HashMap, TreeMap ist und wieso man genau die verwenden muss, aber im Grunde
-     * werden in der HashMap poiUnsortiert die unsortierten Punkte mit ihren Abstandswerten zum Roboterpunkt
-     * gespeichert.
-     * <p>
-     * Allgemein hat eine Map keys und values. Jedem key ist ein value zugeordnet und man kann über die keys
-     * die values bekommen und andersrum. Hier werden die Punkte aus einem Array Punkte[] als Keys verwendet
-     * und denen werden ihre Abstandswerte (zu dem aktuellen Roboterpunkt) zugeordnet.
-     * <p>
-     * Dann wird ein neuer Punkt erstellt, der die Werte von der HashMap hat (siehe Klasse Punkt) und dann wird
-     * der als Grundlage genommen um die die HashMap nach ihren values (das sind die Abstandswerte) zu
-     * sortieren.. irgendwie so.
-     * Diese sortierten values mit ihren keys werden dann alle in poiSortiert gespeichert
-     * <p>
-     * Dann werden die values aus der TreeMap poiSortiert in dem Array poiSortiert gespeichert, weil ich nicht
-     * wusste wie man mit der TreeMap weiter gehen sollte.
+     * Die sortierten Punkte werden in einer ArrayList "poiArrayListSortiert" gespeichert und als Array "poiArraySortiert"
+     * wieder ausgegeben.
      */
-    private static void poiSortieren(Punkt[] poi) {
-        HashMap<Punkt, Double> poiUnsortiert = new HashMap<>();
-        Punkt basisZumVergleichen = new Punkt(poiUnsortiert);
-        TreeMap<Punkt, Double> poiSortiertTM = new TreeMap<>(basisZumVergleichen);
-        poiSortiert = new Punkt[userPoi.length];
+    private static void poiSortieren(Punkt[] poi) { // poi sind unsortierte Punkte
+        ArrayList<Punkt> poiArrayListSortiert = new ArrayList<>();
 
-        for (Punkt punkt : poi) {
-            poiUnsortiert.put(punkt, ROBOTERPUNKT.getAbstand(punkt));
+        for (Punkt punktU : poi) {
+            if (!poiArrayListSortiert.isEmpty()) {
+                int indexPunktS = poiArrayListSortiert.size(); // wird benutzt um neuen Index festzulegen
+                for (Punkt punktS : poiArrayListSortiert) {
+                    if (ROBOTERPUNKT.getAbstand(punktU) < ROBOTERPUNKT.getAbstand(punktS)) {
+                        indexPunktS--; // wenn ein der PunktU kleiner ist als ein Punkt in sortierter Liste, verringert sich sein Index
+                    }
+                }
+                poiArrayListSortiert.add(indexPunktS, punktU); // fügt den neuen punkt an entsprechender stelle in der ArrayList ein
+            } else {
+                poiArrayListSortiert.add(punktU); // erster Punkt in sortierter Liste, egal welcher abstand
+            }
         }
-        poiSortiertTM.putAll(poiUnsortiert);
-
-        int i = 0; // speichert die sortierten Punkte im Array this.poiSortiert
-        for (Punkt punkt : poiSortiertTM.keySet()) {
-            poiSortiert[i] = punkt;
-            i++;
-        }
+        // um die ArrayList in Array zu ändern (weil ich davor nur mit Array gearbeitet habe. So muss ich nichts ändern)
+        poiArraySortiert = new Punkt[poiArrayListSortiert.size()];
+        poiArraySortiert = poiArrayListSortiert.toArray(poiArraySortiert);
     }
 
     /**
@@ -170,33 +157,30 @@ public class Spielfeld {
      * zukünftig ausgeschlossen wird.
      * Sobald ein naechsterPunkt erzeugt wurde, wird von ihm der Verschiebungsvektor ausgerechnet und der Roboterpunkt
      * um diesen verschoben.
-     * Dann werden die Punkte aus dem Array poiSortiert erneut mit den neuen Koordinaten des Roboterpunktes, nach ihrem
-     * sortiert kürzesten Abstand sortiert.
+     * Dann werden die Punkte aus dem Array poiArraySortiert erneut mit den neuen Koordinaten des Roboterpunktes, nach ihrem
+     * kürzesten Abstand berechnet.
      */
     private static void poiAbfahren() {
         poiSortieren(punktEingabe());
-        Punkt[] poiAbgefahren = new Punkt[userPoi.length];
+        Punkt[] poiAbgefahren = new Punkt[poiArraySortiert.length];
         Punkt naechsterPunkt = new Punkt();
-        for (int i = 0; i < poiSortiert.length; i++) {
-            boolean neuerPunkt = false;
-            for (Punkt punkt : poiSortiert) {
-                if (!poiSortiert[0].equals(new Punkt(0, 0)) && !neuerPunkt && !Arrays.asList(poiAbgefahren).contains(punkt)) {
+        for (int i = 0; i < poiArraySortiert.length; i++) {
+            for (Punkt punkt : poiArraySortiert) {
+                if (!Arrays.asList(poiAbgefahren).contains(punkt)) {
                     naechsterPunkt.setXY(punkt.getX(), punkt.getY());
                     poiAbgefahren[i] = punkt;
-                    neuerPunkt = true;
-                } else if (!neuerPunkt && !Arrays.asList(poiAbgefahren).contains(punkt)) {
-                    naechsterPunkt.setXY(poiSortiert[1].getX(), poiSortiert[1].getX());
-                    poiAbgefahren[i] = poiSortiert[1];
+                    break; // sobald neuer Punkt existiert, wird dieser gespeichert und als nächstes abgefahren
                 }
             }
+
             // ab hier wird viel an die Konsole geschrieben und der Roboter zum nächsten Punkt bewegt
             System.out.println("Ausgangspunkt: (" + ROBOTERPUNKT.getX() + ", " + ROBOTERPUNKT.getY() + ")");
-            for (Punkt punkte : poiSortiert) {
+            for (Punkt punkte : poiArraySortiert) {
                 System.out.println("Abstand zu Punkt" + (getIndex(userPoi, punkte) + 1) + " (" + punkte.getX() + ", " +
                         punkte.getY() + ") = " + ROBOTERPUNKT.getAbstand(punkte));
             }
 
-            int dx = naechsterPunkt.getX() - ROBOTERPUNKT.getX();
+            int dx = naechsterPunkt.getX() - ROBOTERPUNKT.getX(); // Verschiebevektor um Roboter zu bewegen
             int dy = naechsterPunkt.getY() - ROBOTERPUNKT.getY();
 
             System.out.println("---\nnächster Punkt = Punkt (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
@@ -204,7 +188,7 @@ public class Spielfeld {
                     ROBOTERPUNKT.getAbstand(naechsterPunkt));
 
             ROBOTERPUNKT.bewegeUm(dx, dy);
-            poiSortieren(poiSortiert);
+            poiSortieren(poiArraySortiert); // um mit neuen Roboterkoordinaten den nächsten näheren Punkt zu finden
 
             System.out.println("...Neuer Ausganspunkt: (" + ROBOTERPUNKT.getX() + ", " + ROBOTERPUNKT.getY() + ")\n----------");
         }
@@ -212,6 +196,14 @@ public class Spielfeld {
 
     private static <T> int getIndex(T[] arr, T val) { // vorsicht ist geklaut! ist für den code aber auch nicht wichtig.
         return Arrays.asList(arr).indexOf(val);
+    }
+
+    public int getLaenge() {
+        return LAENGE;
+    }
+
+    public int getBreite() {
+        return BREITE;
     }
 
     /**
@@ -278,6 +270,5 @@ public class Spielfeld {
     }
 
     private void zeichnen(ArrayList<Rechteck> hindernisse) {
-
     }
 }
