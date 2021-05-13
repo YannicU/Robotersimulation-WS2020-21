@@ -33,7 +33,7 @@ public class Rechteck {
             float g = ZUFALLSGENERATOR.nextFloat();
             float b = ZUFALLSGENERATOR.nextFloat();
             this.farbe = new Color(r, g, b);
-            checkFarbe(this.farbe);
+            checkFarbe(this.farbe); // nur falls zufällige Farbe nochmal Weiß sein sollte
             System.out.println("Farbe darf nicht weiß sein! Farbe wurde zufällig gewählt: " +
                     "(r = " + this.farbe.getRed() + ", g = " + this.farbe.getGreen() + ", b = " + this.farbe.getBlue() + ")");
         } else {
@@ -83,15 +83,10 @@ public class Rechteck {
 
     public Color getColor() {
         return farbe;
-//        return "red = " + farbe.getRed() + ", green = " + farbe.getGreen() + ", blue = " + farbe.getBlue();
     }
 
     public void setColor(Color farbe) {
         checkFarbe(farbe);
-    }
-
-    public void setColor(float r, float g, float b) {
-        checkFarbe(new Color(r, g, b));
     }
 
     public void bewegeUm(int dx, int dy) {
@@ -113,9 +108,17 @@ public class Rechteck {
     public boolean ueberlappt(Rechteck r) {
         // aktuelles Rechteck = R1
         // Rechteck r = R2
-        int dx = r.getPositionX() - getPositionX();
-        int dy = r.getPositionY() - getPositionY();
-        // wahr für: längeR1 < dx < -längeR2, breiteR1 < dy < -breiteR2
+        int dx = r.getPositionX() - getPositionX(); // Abstandsvektor x-Richtung
+        int dy = r.getPositionY() - getPositionY(); // Abstandsvektor y-Richtung
+
+//        if (dx <= laenge && dx >= -r.getLaenge()) {
+//            if (dy <= breite && dy >= -r.getBreite()) {
+//                return true;
+//            } else return false;
+//        } else return false;
+
+        // längeR1 <= dx <= -längeR2, breiteR1 <= dy <= -breiteR2 ... gibt wahr oder falsch aus
+        // wahr -> Überlappung, falsch -> keine Überlappung
         return laenge >= dx && dx >= -r.getLaenge() && breite >= dy && dy >= -r.getBreite();
     }
 }

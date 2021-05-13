@@ -1,30 +1,37 @@
+import java.awt.*;
 import java.util.*;
-import java.awt.Color;
 
 /**
  * Beschreiben Sie hier die Klasse Spielfeld.
  *
  * @author Yannic Yu
- * @version 11.05.2021
+ * @version 12.05.2021
  */
 
 public class Spielfeld {
     private static final Punkt ROBOTERPUNKT = new Punkt(0, 0);
-    private static final Random ZUFALLSGENERATOR = new Random();
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final int LAENGE = 500;
     private static final int BREITE = 500;
+    // für die Hindernisse
+    private static final Random ZUFALLSGENERATOR = new Random();
+    // für die Punkte
     private static int x;
     private static int y;
     private static Punkt[] userPoi;
     private static Punkt[] poiArraySortiert;
+    // für die Leinwand
+    private static Leinwand leinwand;
 
     Spielfeld() {
         Roboter roboter = new Roboter();
+        leinwand = new Leinwand("CoolesFenster1", LAENGE, BREITE);
     }
 
     public static void main(String[] args) {
+        new Spielfeld();
         Roboter roboter = new Roboter();
+
         System.out.println("Hey, was willst du machen?" +
                 "\n  (a) Points-of-Interest abfahren" +
                 "\n  (b) Hindernisse umfahren" +
@@ -37,23 +44,25 @@ public class Spielfeld {
             if (userEingabe.equalsIgnoreCase("a")) {
                 poiAbfahren();
             } else if (userEingabe.equalsIgnoreCase("b")) {
-                Leinwand leinwand = new Leinwand(LAENGE, BREITE);
-                while (true) {
-                    Leinwand.Zeichenflaeche zeichenflaeche = new Leinwand.Zeichenflaeche();
-                }
+                hindernisseUmfahren();
             } else if (userEingabe.equalsIgnoreCase("c")) {
                 roboter.spracherkennung();
+            } else if (userEingabe.equalsIgnoreCase("ende")) {
+                leinwand.closeLeinwand();
             }
         }
     }
 
+    /*
+     * ----------------------------------------Punkt----------------------------------------
+     */
+
     /**
      * Methode punktEingabe
      * <p>
-     * Die zuvor angegebene Anzahl der Punkte wird als obere Grenze des loops verwendet.
-     * In dem loop gibt der Nutzer die x und y Werte der Punkte an.
-     * Diese werden mithilfe einer anderen Methode ("checkGrenzen") auf ihre Grenzen geprüft.
-     * Sollten die Grenzen nicht stimmen, muss der Nutzer die Werte für den aktuellen Punkt erneut eingeben.
+     * Nutzer wird um Eingabe für <code>punktAnzahl</code> gebeten.
+     * In dem folgenden for loop muss er die <code>x</code> und <code>y</code> Werte der Punkte angeben.
+     * Diese werden durch <code>checkGrenzen</code> geprüft und dann in <code>userPoi</code> gespeichert.
      */
     private static Punkt[] punktEingabe() {
         System.out.print("Anzahl der Punkte: ");
@@ -120,11 +129,9 @@ public class Spielfeld {
     /**
      * Methode poiSortieren
      * <p>
-     * Die Methode benötigt ein Array "poi". Die Punkte in dem Array "poi" werden nach ihrem Abstand zum
-     * Roboterpunkt aufsteigend sortiert.
-     * <p>
-     * Die sortierten Punkte werden in einer ArrayList "poiArrayListSortiert" gespeichert und als Array "poiArraySortiert"
-     * wieder ausgegeben.
+     * Punkte werden nach ihrem Abstand zum <code>ROBOTERPUNKT</code> aufsteigend sortiert.
+     *
+     * @param poi ArrayListe mit allen Points of Interest, die vom Nutzer angegeben wurden.
      */
     private static void poiSortieren(Punkt[] poi) { // poi sind unsortierte Punkte
         ArrayList<Punkt> poiArrayListSortiert = new ArrayList<>();
@@ -150,30 +157,28 @@ public class Spielfeld {
     /**
      * Methode poiAbfahren
      * <p>
-     * es wird ein neuer Punkt naechsterPunkt erzeugt, der angibt, welchen Punkt der Roboter als nächstes anfahren kann.
-     * Dieser wird nur dann erzeugt, wenn es nicht der Roboterpunkt selbst ist und er nicht schon vom Roboter angefahren
-     * wurde.
-     * Das wird geprüft, indem der erzeugten naechstenPunkt in dem leeren Array poiAbgefahren gespeichert wird und
-     * zukünftig ausgeschlossen wird.
-     * Sobald ein naechsterPunkt erzeugt wurde, wird von ihm der Verschiebungsvektor ausgerechnet und der Roboterpunkt
-     * um diesen verschoben.
-     * Dann werden die Punkte aus dem Array poiArraySortiert erneut mit den neuen Koordinaten des Roboterpunktes, nach ihrem
-     * kürzesten Abstand berechnet.
+     * Hier wird ein Punkt gesucht, den <code>ROBOTERPUNKT</code> nich abgefahren hat und am nähesten zu ihm liegt.
+     * <p>
+     * Sobald <code>naechsterPunkt</code> gefunden wurde, wird <code>ROBOTERPUNKT</code> zu diesem bewegt.
+     * <p>
+     * Die restlichen Punkte werden wieder nach den kürzesten Abständen zum <code>ROBOTERPUNKT</code> sortiert.
+     * Das wird wiederholt, bis alle <code>poi</code> abgefahren wurden.
      */
     private static void poiAbfahren() {
         poiSortieren(punktEingabe());
-        Punkt[] poiAbgefahren = new Punkt[poiArraySortiert.length];
-        Punkt naechsterPunkt = new Punkt();
+        Punkt[] poiAbgefahren = new Punkt[poiArraySortiert.length]; // speichert die schon abgefahrenen Punkte
+        Punkt naechsterPunkt = new Punkt(); // nächster Punkt der vom Roboter abgefahren wird
+
         for (int i = 0; i < poiArraySortiert.length; i++) {
             for (Punkt punkt : poiArraySortiert) {
-                if (!Arrays.asList(poiAbgefahren).contains(punkt)) {
+                if (!Arrays.asList(poiAbgefahren).contains(punkt)) { // nur wenn der Punkt noch nicht abgefahren wurde
                     naechsterPunkt.setXY(punkt.getX(), punkt.getY());
-                    poiAbgefahren[i] = punkt;
-                    break; // sobald neuer Punkt existiert, wird dieser gespeichert und als nächstes abgefahren
+                    poiAbgefahren[i] = punkt; // "markiert" den neuen punkt als abgefahren
+                    break; // sobald neuer Punkt gefunden wurde, kann der loop geschlossen werden
                 }
             }
 
-            // ab hier wird viel an die Konsole geschrieben und der Roboter zum nächsten Punkt bewegt
+            // ab hier wird viel an die Konsole geschrieben und der Roboter wird zum nächsten Punkt bewegt
             System.out.println("Ausgangspunkt: (" + ROBOTERPUNKT.getX() + ", " + ROBOTERPUNKT.getY() + ")");
             for (Punkt punkte : poiArraySortiert) {
                 System.out.println("Abstand zu Punkt" + (getIndex(userPoi, punkte) + 1) + " (" + punkte.getX() + ", " +
@@ -194,81 +199,96 @@ public class Spielfeld {
         }
     }
 
-    private static <T> int getIndex(T[] arr, T val) { // vorsicht ist geklaut! ist für den code aber auch nicht wichtig.
+    // vorsicht ist geklaut! ist für den code aber auch nicht wichtig. Nur für das Aussehen, wenn an die Konsole
+    // geschrieben wird.
+    private static <T> int getIndex(T[] arr, T val) {
         return Arrays.asList(arr).indexOf(val);
     }
 
-    public int getLaenge() {
-        return LAENGE;
-    }
-
-    public int getBreite() {
-        return BREITE;
-    }
+    /*
+     * ----------------------------------------Hindernisse----------------------------------------
+     */
 
     /**
      * Methode hindernislisteErzeugen
      * <p>
-     * Hier kann der Nutzer angeben wie viele Hindernisse er auf dem Spielfeld haben möchte.
-     * Dann werden für die genannte Anzahl, unter bestimmten bestimmungen, Hindernisse ersellt und in einer
-     * ArrayList gespeichert und am ende zurückgegeben.
+     * Hier gibt der Nutzer an wie viele Hindernisse er erstellen möchte.
+     * Diese werden dann zufällig generiert und verteilt, ohne dass sie sich schneiden, oder die definierten Grenzen
+     * überschreiten.
      */
-    public ArrayList<Rechteck> hindernislisteErzeugen() {
-        int rechteckNummer = 1;
-        int counter = 0; // gibt an wie viele Hindernisse das neue Rechteck nicht schneidet
-        int ueberlappungZaehler = 0;
-        int ueberlappungMax = 50;
+    public static ArrayList<Rechteck> hindernislisteErzeugen() {
+        int nummerRechteck = 1;
+        int counter = 0; // gibt an mit wie vielen Hindernissen sich das Rechteck nicht schneidet
+        int zaehlerUeberlappungen = 0;
+        int maxUeberlappungen = 50;
         ArrayList<Rechteck> hindernisliste = new ArrayList<>();
 
         // Nutzer wird nach Angaben gefragt, die in 'eingabeIstZahl' auf korrektes Format geprüft wird
         System.out.print("Anzahl der Hindernisse: ");
         int hindernisseAnzahl = eingabeIstZahl("Anzahl der Hindernisse: ");
 
-        while (hindernisliste.size() < hindernisseAnzahl && ueberlappungZaehler < ueberlappungMax) {
-            Rechteck zufallR = createZufallsRechteck(rechteckNummer);
+        while (hindernisliste.size() < hindernisseAnzahl && zaehlerUeberlappungen < maxUeberlappungen) {
+            Rechteck randomRechteck = createRandomRechteck(nummerRechteck);
             for (Rechteck hindernis : hindernisliste) {
-                if (!zufallR.ueberlappt(hindernis)
-                        && (LAENGE - zufallR.getPositionX()) > zufallR.getLaenge()
-                        && (BREITE - zufallR.getPositionY()) > zufallR.getBreite()) {
+                // überprüft ob das Rechteck sich überlappt und sich innerhalb der Grenzen befindet
+                if (!randomRechteck.ueberlappt(hindernis)) {
                     counter++;
                 } else {
                     // schneiden sich zwei Rechtecke, wird der counter zurückgesetzt, der Überlappungszähler erhöht und
                     // der for loop unterbrochen, da kein Grund besteht, ihn weiter auszuführen
                     counter = 0;
-                    ueberlappungZaehler++;
+                    zaehlerUeberlappungen++;
                     break;
                 }
             }
             // der Counter gibt an ob das neue Rechteck keines der Vorhandenen schneidet
-            if (counter == hindernisliste.size()) {
-                hindernisliste.add(zufallR);
-                ueberlappungZaehler = 0; // um nur Überlapp. zuzulassen die hintereinander erfolgen
+            if (counter == hindernisliste.size()
+                    && (LAENGE - randomRechteck.getPositionX()) > randomRechteck.getLaenge()
+                    && (BREITE - randomRechteck.getPositionY()) > randomRechteck.getBreite()) {
+                hindernisliste.add(randomRechteck);
+                zaehlerUeberlappungen = 0; // um nur Überlapp. zuzulassen die hintereinander erfolgen
                 counter = 0;
-                rechteckNummer++; // um die Nummer des nachfolgenden Rechteckes zu bestimmen
+                nummerRechteck++; // um die Nummer des nachfolgenden Rechteckes zu bestimmen
             }
 
         }
         System.out.println("Erzeugte hindernisse: " + hindernisliste.size());
-        return hindernisliste;
+        return hindernisliste; // gibt die ArrayList<Rechteck> hindernisliste zurück
     }
 
-    public Rechteck createZufallsRechteck(int nummer) { // generiert ein Rechteck mit zufälligen Werten
+    private static int zufallszahl(int von, int bis) { // generiert eine zufällige Zahl
+        // Grenzen z.B. von: 20, bis: 75
+        // (Zufallszahl im Bereich von 0 - 55) + (untere Grenze: 20) = zufällige Zahl im Bereich 20 - 75
+        // "bis + 1", weil die normalerweise die 0 noch mit reinkommt und dann nur im Bereich 0 - 54 gewählt wird.
+        // Durch "+ 1" wird im Bereich 0 - 55 gewählt.
+        // "- von) + von" weil man dadurch die untere Grenze bekommt.
+        return ZUFALLSGENERATOR.nextInt(bis + 1 - von) + von;
+    }
+
+    public static Rechteck createRandomRechteck(int nummer) { // generiert ein Rechteck mit zufälligen Werten
         int laengeMax = 100;
         int laengeMin = 20;
         int breiteMax = 100;
         int breiteMin = 20;
-        float r = ZUFALLSGENERATOR.nextFloat();
-        float g = ZUFALLSGENERATOR.nextFloat();
-        float b = ZUFALLSGENERATOR.nextFloat();
+        int r = zufallszahl(0, 255);
+        int g = zufallszahl(0, 255);
+        int b = zufallszahl(0, 255);
         Punkt zufallsPunkt = new Punkt(zufallszahl(1, (LAENGE - 1)), zufallszahl(1, (BREITE - 1)));
         return new Rechteck(zufallsPunkt, zufallszahl(laengeMin, laengeMax), zufallszahl(breiteMin, breiteMax),
                 "Rechteck " + nummer, new Color(r, g, b));
     }
 
-    private int zufallszahl(int von, int bis) { // generiert zufallszahl, in den vorgegebenen Grenzen
-        return ZUFALLSGENERATOR.nextInt(bis + 1 - von) + von;
+    public static void hindernisseUmfahren() {
+        leinwand.setLeinwandVisible(true);
+        zeichnen(hindernislisteErzeugen());
     }
 
-    private void zeichnen(ArrayList<Rechteck> hindernisse) {
+    /*
+     * ----------------------------------------Leinwand----------------------------------------
+     */
+
+    public static void zeichnen(ArrayList<Rechteck> hindernisse) {
+        leinwand.zeichnen(hindernisse);
     }
+
 }

@@ -5,7 +5,7 @@ import java.util.Scanner;
  * Beschreiben Sie hier die Klasse Roboter.
  *
  * @author Yannic Yu
- * @version 30.04.2021
+ * @version 13.05.2021
  */
 
 public class Roboter {
@@ -29,6 +29,7 @@ public class Roboter {
                         try {
                             switch (Stichwort.valueOf(wort)) {
                                 case NAME:
+                                case NAMEN:
                                 case BEZEICHNUNG:
                                     System.out.println("Seppi");
                                     break;
@@ -39,14 +40,14 @@ public class Roboter {
                                 case KOORDINATEN:
                                 case PUNKT:
                                     System.out.println("Irgendwo im Nirgendwo");
-                                    break;
+                                break;
                                 case LANG:
                                 case LAENGE:
                                     System.out.println("seeehr laaaang");
                                     break;
                                 case BREIT:
                                 case BREITE:
-                                    System.out.println("Ich bin nich nur breit, sondern auch dicht... lol.");
+                                    System.out.println("Ich bin nicht nur breit, sondern auch dicht... lol.");
                                     break;
                                 case DANKE:
                                     System.out.println("Kein ding");
@@ -55,8 +56,8 @@ public class Roboter {
                                     System.out.println("Wow! So höflich");
                                     break;
                                 case HALLO:
-                                case WIEDERSEHEN:
                                 case TSCHUESS:
+                                case CIAO:
                                     System.out.println("Sers!");
                                     break;
                                 case NICHT:
@@ -76,8 +77,11 @@ public class Roboter {
     }
 
     enum Stichwort {
+        CIAO,
         NAME,
+        NAMEN,
         BEZEICHNUNG,
+        BEFINDE,
         FARBE,
         POSITION,
         KOORDINATEN,
@@ -89,7 +93,6 @@ public class Roboter {
         DANKE,
         GERNE,
         HALLO,
-        WIEDERSEHEN,
         TSCHUESS,
         NICHT,
     }

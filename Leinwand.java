@@ -9,45 +9,69 @@ import java.util.ArrayList;
  * @version 11.05.2021
  */
 public class Leinwand {
-    private final Spielfeld SPIELFELD = new Spielfeld();
+    private int laenge;
+    private int breite;
+    private int verstaerkung = 100;
+    private ArrayList<Rechteck> hindernisse;
     private JFrame fenster;
-    private Zeichenflaeche zeichenflaeche;
+    private Zeichenflaeche zeichenflaeche = new Zeichenflaeche();
 
-
-    Leinwand(int laenge, int breite) {
-        fenster = new JFrame("Cooles Fenster 1");
-        zeichenflaeche = new Zeichenflaeche();
-        fenster.setLocation(1920 / 2 + laenge / 2, 1080 / 2 - breite / 2);
-        fenster.setSize(laenge, breite);
-
-
-        zeichenflaeche.repaintFiguren(SPIELFELD.hindernislisteErzeugen());
-        fenster.add(zeichenflaeche);
-        fenster.setVisible(true);
+    Leinwand(String titel, int laenge, int breite) {
+        this.laenge = laenge;
+        this.breite = breite;
+        fenster = new JFrame();
+        fenster.setSize(this.laenge + verstaerkung, this.breite + verstaerkung);
+        fenster.setTitle(titel);
+        fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        fenster.setLocation(15, 15);
     }
 
-    public static class Zeichenflaeche extends JPanel {
-        ArrayList<Rechteck> hindernisse;
+    public void zeichnen(ArrayList<Rechteck> hindernisse) {
+        fenster.setSize(laenge + verstaerkung + 1, breite + verstaerkung);
+        this.hindernisse = hindernisse;
+        zeichenflaeche.repaintFiguren(hindernisse);
+        zeichenflaeche.setLocation(50, 50);
+        fenster.add(zeichenflaeche);
+        fenster.setSize(laenge + verstaerkung, breite + verstaerkung);
+    }
 
-        private ArrayList<Rechteck> getHindernisse() {
-            return hindernisse;
+    public void setLeinwandVisible(boolean visible) {
+        fenster.setVisible(visible);
+    }
+
+    public void closeLeinwand() {
+        fenster.dispose();
+    }
+
+    public void warten(int millisekunden) {
+        try {
+            Thread.sleep(millisekunden);
+        } catch (Exception e) {
+            System.out.println("Exception occured: " + e);
         }
+    }
+
+    public class Zeichenflaeche extends JPanel {
 
         @Override
-        protected void paintComponent(Graphics g) {
-            for (Rechteck h : getHindernisse()) {
-                g.fillRect(h.getPositionX(), h.getPositionY(), h.getLaenge(), h.getBreite());
+        public void paintComponent(Graphics g) {
+            g.drawRect(0, 0, laenge, breite);
+            g.setColor(Color.black);
+            for (Rechteck h : hindernisse) {
                 g.setColor(h.getColor());
-                g.fillOval(h.getPositionX() - 2, h.getPositionY() - 2, 4, 4);
+                g.fillRect(h.getPositionX(), h.getPositionY(), h.getLaenge(), h.getBreite());
+                g.setColor(Color.black);
+                g.drawRect(h.getPositionX(), h.getPositionY(), h.getLaenge(), h.getBreite());
                 g.drawString(h.getBezeichnung(), h.getPositionX(), h.getPositionY());
             }
         }
 
-        public void repaintFiguren(ArrayList<Rechteck> figuren) {
-            this.hindernisse = figuren;
-            for (Rechteck h : getHindernisse()) {
-                repaint(h.getPositionX(), h.getPositionY(), h.getLaenge(), h.getBreite());
+        private void repaintFiguren(ArrayList<Rechteck> figuren) {
+            for (Rechteck h : figuren) {
+                zeichenflaeche.repaint(h.getPositionX(), h.getPositionY(), h.getLaenge(), h.getBreite());
             }
+//            zeichenflaeche.repaint();
         }
     }
+
 }
