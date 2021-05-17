@@ -5,11 +5,13 @@ import java.util.*;
  * Beschreiben Sie hier die Klasse Spielfeld.
  *
  * @author Yannic Yu
- * @version 12.05.2021
+ * @version 17.05.2021
  */
 
 public class Spielfeld {
-    private static final Punkt ROBOTERPUNKT = new Punkt(0, 0);
+//    private static Punkt roboterpunkt = new Punkt(0, 0);
+    private static Roboter roboter = new Roboter(new Punkt(0, 0), 20, "Roboter", Color.red);
+    private static Punkt roboterpunkt = roboter.getPos();
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final int LAENGE = 500;
     private static final int BREITE = 500;
@@ -24,13 +26,10 @@ public class Spielfeld {
     private static Leinwand leinwand;
 
     Spielfeld() {
-        Roboter roboter = new Roboter();
-        leinwand = new Leinwand("CoolesFenster1", LAENGE, BREITE);
     }
 
     public static void main(String[] args) {
-        new Spielfeld();
-        Roboter roboter = new Roboter();
+        leinwand = new Leinwand("CoolesFenster1", LAENGE, BREITE, Color.white);
 
         System.out.println("Hey, was willst du machen?" +
                 "\n  (a) Points-of-Interest abfahren" +
@@ -48,6 +47,7 @@ public class Spielfeld {
             } else if (userEingabe.equalsIgnoreCase("c")) {
                 roboter.spracherkennung();
             } else if (userEingabe.equalsIgnoreCase("ende")) {
+                leinwand.setVisible(false);
                 leinwand.closeLeinwand();
             }
         }
@@ -129,7 +129,7 @@ public class Spielfeld {
     /**
      * Methode poiSortieren
      * <p>
-     * Punkte werden nach ihrem Abstand zum <code>ROBOTERPUNKT</code> aufsteigend sortiert.
+     * Punkte werden nach ihrem Abstand zum <code>roboterpunkt</code> aufsteigend sortiert.
      *
      * @param poi ArrayListe mit allen Points of Interest, die vom Nutzer angegeben wurden.
      */
@@ -140,7 +140,7 @@ public class Spielfeld {
             if (!poiArrayListSortiert.isEmpty()) {
                 int indexPunktS = poiArrayListSortiert.size(); // wird benutzt um neuen Index festzulegen
                 for (Punkt punktS : poiArrayListSortiert) {
-                    if (ROBOTERPUNKT.getAbstand(punktU) < ROBOTERPUNKT.getAbstand(punktS)) {
+                    if (roboterpunkt.getAbstand(punktU) < roboterpunkt.getAbstand(punktS)) {
                         indexPunktS--; // wenn ein der PunktU kleiner ist als ein Punkt in sortierter Liste, verringert sich sein Index
                     }
                 }
@@ -157,11 +157,11 @@ public class Spielfeld {
     /**
      * Methode poiAbfahren
      * <p>
-     * Hier wird ein Punkt gesucht, den <code>ROBOTERPUNKT</code> nich abgefahren hat und am nähesten zu ihm liegt.
+     * Hier wird ein Punkt gesucht, den <code>roboterpunkt</code> nich abgefahren hat und am nähesten zu ihm liegt.
      * <p>
-     * Sobald <code>naechsterPunkt</code> gefunden wurde, wird <code>ROBOTERPUNKT</code> zu diesem bewegt.
+     * Sobald <code>naechsterPunkt</code> gefunden wurde, wird <code>roboterpunkt</code> zu diesem bewegt.
      * <p>
-     * Die restlichen Punkte werden wieder nach den kürzesten Abständen zum <code>ROBOTERPUNKT</code> sortiert.
+     * Die restlichen Punkte werden wieder nach den kürzesten Abständen zum <code>roboterpunkt</code> sortiert.
      * Das wird wiederholt, bis alle <code>poi</code> abgefahren wurden.
      */
     private static void poiAbfahren() {
@@ -179,23 +179,24 @@ public class Spielfeld {
             }
 
             // ab hier wird viel an die Konsole geschrieben und der Roboter wird zum nächsten Punkt bewegt
-            System.out.println("Ausgangspunkt: (" + ROBOTERPUNKT.getX() + ", " + ROBOTERPUNKT.getY() + ")");
+            System.out.println("Ausgangspunkt: (" + roboterpunkt.getX() + ", " + roboterpunkt.getY() + ")");
             for (Punkt punkte : poiArraySortiert) {
                 System.out.println("Abstand zu Punkt" + (getIndex(userPoi, punkte) + 1) + " (" + punkte.getX() + ", " +
-                        punkte.getY() + ") = " + ROBOTERPUNKT.getAbstand(punkte));
+                        punkte.getY() + ") = " + roboterpunkt.getAbstand(punkte));
             }
 
-            int dx = naechsterPunkt.getX() - ROBOTERPUNKT.getX(); // Verschiebevektor um Roboter zu bewegen
-            int dy = naechsterPunkt.getY() - ROBOTERPUNKT.getY();
+            int dx = naechsterPunkt.getX() - roboterpunkt.getX(); // Verschiebevektor um Roboter zu bewegen
+            int dy = naechsterPunkt.getY() - roboterpunkt.getY();
 
             System.out.println("---\nnächster Punkt = Punkt (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
                     ")\nVerschiebungsvektor: (" + dx + ", " + dy + ") = " +
-                    ROBOTERPUNKT.getAbstand(naechsterPunkt));
+                    roboterpunkt.getAbstand(naechsterPunkt));
 
-            ROBOTERPUNKT.bewegeUm(dx, dy);
+//            roboterpunkt.bewegeUm(dx, dy);
+            roboter.bewegeUm(dx, dy);
             poiSortieren(poiArraySortiert); // um mit neuen Roboterkoordinaten den nächsten näheren Punkt zu finden
 
-            System.out.println("...Neuer Ausganspunkt: (" + ROBOTERPUNKT.getX() + ", " + ROBOTERPUNKT.getY() + ")\n----------");
+            System.out.println("...Neuer Ausganspunkt: (" + roboterpunkt.getX() + ", " + roboterpunkt.getY() + ")\n----------");
         }
     }
 
@@ -243,8 +244,8 @@ public class Spielfeld {
             }
             // der Counter gibt an ob das neue Rechteck keines der Vorhandenen schneidet
             if (counter == hindernisliste.size()
-                    && (LAENGE - randomRechteck.getPositionX()) > randomRechteck.getLaenge()
-                    && (BREITE - randomRechteck.getPositionY()) > randomRechteck.getBreite()) {
+                    && (LAENGE - randomRechteck.getX()) > randomRechteck.getLaenge()
+                    && (BREITE - randomRechteck.getY()) > randomRechteck.getBreite()) {
                 hindernisliste.add(randomRechteck);
                 zaehlerUeberlappungen = 0; // um nur Überlapp. zuzulassen die hintereinander erfolgen
                 counter = 0;
@@ -279,7 +280,6 @@ public class Spielfeld {
     }
 
     public static void hindernisseUmfahren() {
-        leinwand.setLeinwandVisible(true);
         zeichnen(hindernislisteErzeugen());
     }
 
@@ -288,7 +288,9 @@ public class Spielfeld {
      */
 
     public static void zeichnen(ArrayList<Rechteck> hindernisse) {
-        leinwand.zeichnen(hindernisse);
+        Leinwand leinwand = Leinwand.getLeinwand();
+        leinwand.draw(hindernisse);
+        leinwand.draw(roboter);
+        leinwand.warten(10);
     }
-
 }
