@@ -7,7 +7,7 @@ import java.util.Scanner;
  * Beschreiben Sie hier die Klasse Roboter.
  *
  * @author Yannic Yu
- * @version 17.05.2021
+ * @version 23.05.2021
  */
 
 public class Roboter extends Kreis {
@@ -18,6 +18,19 @@ public class Roboter extends Kreis {
 
     Roboter(Punkt position, int durchmesser, String bezeichnung, Color farbe) {
         super(position, durchmesser, bezeichnung, farbe);
+    }
+
+    public boolean imSpielfeld(int laenge, int breite) {
+        return (0 < super.minX() && super.maxX() < laenge) &&
+                (0 < super.minY() && super.maxY() < breite);
+    }
+
+    public boolean zwischenX(Figur figur) {
+        return figur.minX() <= super.maxX() && super.minX() <= figur.maxX();
+    }
+
+    public boolean zwischenY(Figur figur) {
+        return figur.minY() <= super.maxY() && super.minY() <= figur.maxY();
     }
 
     void spracherkennung() {
@@ -56,7 +69,7 @@ public class Roboter extends Kreis {
                             case HELP:
                                 int i = 1;
                                 System.out.println("Stichwörter:");
-                                for (Stichwort stichwort: EnumSet.allOf(Stichwort.class)) {
+                                for (Stichwort stichwort : EnumSet.allOf(Stichwort.class)) {
                                     System.out.println(i + ". " + stichwort);
                                     i++;
                                 }

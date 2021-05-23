@@ -1,6 +1,13 @@
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * Beschreiben Sie hier die Klasse Figur.
+ *
+ * @author Yannic
+ * @version 23.05.2021
+ */
+
 abstract class Figur {
     private static final Random ZUFALLSGENERATOR = new Random();
     private Punkt position;

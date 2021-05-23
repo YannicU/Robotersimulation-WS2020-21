@@ -1,5 +1,12 @@
 import java.awt.*;
 
+/**
+ * Beschreiben Sie hier die Klasse Kreis.
+ *
+ * @author Yannic
+ * @version 23.05.2021
+ */
+
 public class Kreis extends Figur {
     private int durchmesser;
 
@@ -12,19 +19,19 @@ public class Kreis extends Figur {
     }
 
     int minX() {
-        return 0;
+        return getX();
     }
 
     int minY() {
-        return 0;
+        return getY();
     }
 
     int maxX() {
-        return 0;
+        return getX() + getDurchmesser();
     }
 
     int maxY() {
-        return 0;
+        return getY() + getDurchmesser();
     }
 
     public int getDurchmesser() {

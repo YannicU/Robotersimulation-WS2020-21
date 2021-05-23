@@ -4,100 +4,34 @@ import java.util.ArrayList;
 
 /**
  * Beschreiben Sie hier die Klasse Leinwand.
- * <p>
- * Das meiste ist abgeschaut!
  *
  * @author Yannic
- * @version 17.05.2021
+ * @version 23.05.2021
  */
 
-
 public class Leinwand {
-    private static Leinwand leinwand;
-    private static int fensterlaenge;
-    private static int fensterbreite;
-    private JFrame fenster;
-    private Zeichenflaeche zeichenflaeche;
-    private Graphics2D grafik;
-    private Color hintergrundFarbe;
-    private Image leinwandBild;
-    private ArrayList<Rechteck> hindernisse;
+    private final JFrame FENSTER;
+    private final Zeichenflaeche ZEICHENFLAECHE;
 
-    Leinwand(String titel, int laenge, int breite, Color hintergrundFarbe) {
-        this.hintergrundFarbe = hintergrundFarbe;
+    Leinwand(String titel, int laenge, int breite) {
+        FENSTER = new JFrame();
+        ZEICHENFLAECHE = new Zeichenflaeche();
 
-        fensterlaenge = laenge;
-        fensterbreite = breite;
-
-        fenster = new JFrame();
-        zeichenflaeche = new Zeichenflaeche();
-
-        fenster.setContentPane(zeichenflaeche);
-        fenster.setTitle(titel);
-        fenster.setLocation(15, 15);
-
-        zeichenflaeche.setPreferredSize(new Dimension(laenge, breite));
-        fenster.pack();
-
-        fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        hindernisse = new ArrayList<>();
-    }
-
-    // um mehrfach auf der selben leinwand zu zeichnen, ohne eine neue zu erschaffen.
-    public static Leinwand getLeinwand() {
-        if (leinwand == null) { // wenn noch keine existiert, soll eine erstellt werden.
-            leinwand = new Leinwand("Cooles Fenster 1", fensterlaenge, fensterbreite, Color.white);
-        }
-        leinwand.setVisible(true);
-        return leinwand;
+        FENSTER.setContentPane(ZEICHENFLAECHE);
+        FENSTER.setTitle(titel);
+        FENSTER.setLocation(-1920 / 2, 15);
+        ZEICHENFLAECHE.setPreferredSize(new Dimension(laenge, breite));
+        FENSTER.setSize(laenge + 275, breite + 300);
+//        FENSTER.pack();
+        FENSTER.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void setVisible(boolean visible) {
-        if (grafik == null) {
-            Dimension size = zeichenflaeche.getSize();
-            leinwandBild = zeichenflaeche.createImage(size.width, size.height);
-            grafik = (Graphics2D) leinwandBild.getGraphics();
-        }
-        fenster.setVisible(visible);
+        FENSTER.setVisible(visible);
     }
 
-    public void draw(Roboter roboter){
-        repaintComponent(roboter);
-    }
-
-    public void draw(ArrayList<Rechteck> hindernisse) {
-        repaintComponent(hindernisse);
-    }
-
-    private void repaintComponent(Roboter r){
-        grafik.setColor(r.getColor());
-        grafik.drawOval(r.getX(), r.getY(), r.getDurchmesser(), r.getDurchmesser());
-        grafik.fillOval(r.getX(), r.getY(), r.getDurchmesser(), r.getDurchmesser());
-        grafik.setColor(Color.black);
-        grafik.drawString(r.getBezeichnung(), r.getX(), r.getY());
-    }
-
-    private void repaintComponent(ArrayList<Rechteck> hindernisse) {
-        leeren();
-        for (Rechteck h : hindernisse) {
-            grafik.setColor(h.getColor());
-            grafik.drawRect(h.getX(), h.getY(), h.getLaenge(), h.getBreite());
-            grafik.setColor(Color.black);
-            grafik.drawString(h.getBezeichnung(), h.getX(), h.getY());
-        }
-        zeichenflaeche.repaint();
-    }
-
-    private void leeren() {
-        Dimension size = zeichenflaeche.getSize();
-        grafik.setColor(hintergrundFarbe);
-        grafik.fillRect(0, 0, size.width, size.height);
-    }
-
-
-    public void closeLeinwand() {
-        fenster.dispose();
+    public void zeichnen(ArrayList<Rechteck> hindernisse, Roboter roboter) {
+        ZEICHENFLAECHE.repaintFiguren(hindernisse, roboter);
     }
 
     public void warten(int millisekunden) {
@@ -108,11 +42,34 @@ public class Leinwand {
         }
     }
 
-    public class Zeichenflaeche extends JPanel {
+    public void close() {
+        FENSTER.dispose();
+    }
+
+    public static class Zeichenflaeche extends JPanel {
+        private ArrayList<Rechteck> hindernisse;
+        private Roboter roboter;
 
         @Override
         public void paintComponent(Graphics g) {
-            g.drawImage(leinwandBild, 0, 0, null);
+            super.paintComponent(g); // zeichnet neue Komponeten und löscht die alten
+            g.setColor(Color.BLACK);
+            g.drawRect(0, 0, 600, 600);
+            for (Rechteck h : hindernisse) {
+                g.setColor(h.getColor());
+                g.fillRect(h.getX(), h.getY(), h.getLaenge(), h.getBreite());
+                g.setColor(Color.BLACK);
+                g.drawRect(h.getX(), h.getY(), h.getLaenge(), h.getBreite());
+                g.drawString(h.getBezeichnung(), h.getX(), h.getY());
+            }
+            g.setColor(roboter.getColor());
+            g.fillOval(roboter.getX(), roboter.getY(), roboter.getDurchmesser(), roboter.getDurchmesser());
+        }
+
+        public void repaintFiguren(ArrayList<Rechteck> figuren, Roboter roboter) {
+            this.hindernisse = figuren;
+            this.roboter = roboter;
+            repaint();
         }
     }
 }
