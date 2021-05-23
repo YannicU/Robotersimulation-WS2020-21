@@ -252,7 +252,7 @@ public class Spielfeld {
      * Diese werden dann zufällig generiert und verteilt, ohne dass sie sich schneiden, oder die definierten Grenzen
      * überschreiten.
      */
-    public static ArrayList<Rechteck> hindernislisteErzeugen() {
+    private static ArrayList<Rechteck> hindernislisteErzeugen() {
         int nummerRechteck = 1;
         int counter = 0; // gibt an mit wie vielen Hindernissen sich das Rechteck nicht schneidet
         int zaehlerUeberlappungen = 0;
@@ -322,6 +322,7 @@ public class Spielfeld {
 
     private static void hindernisseUmfahren() {
         ArrayList<Rechteck> hindernisse = hindernislisteErzeugen();
+        Roboter roboter = new Roboter(new Punkt(1, 1), 10, "Roboter", Color.red);
         leinwand.zeichnen(hindernisse, roboter);
         leinwand.setVisible(true);
 
