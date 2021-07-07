@@ -42,7 +42,8 @@ public class Spielfeld {
                 "\n  (a) Points-of-Interest abfahren" +
                 "\n  (b) Hindernisse umfahren" +
                 "\n  (c) Stichwörter erkennen und antworten" +
-                "\n  'ende', um Programm zu beenden");
+                "\n  'ende', um Programm zu beenden" +
+                "\n ");
         String userEingabe = "";
         while (!userEingabe.equalsIgnoreCase("ende")) {
             System.out.print("Bitte wählen Sie eine der drei Aufgaben! (a/b/c) > ");
