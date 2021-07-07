@@ -45,7 +45,7 @@ public class Spielfeld {
                 "\n  'ende', um Programm zu beenden");
         String userEingabe = "";
         while (!userEingabe.equalsIgnoreCase("ende")) {
-            System.out.print("(a/b/c) > ");
+            System.out.print("Bitte wählen Sie eine der drei Aufgaben! (a/b/c) > ");
             userEingabe = SCANNER.nextLine();
             if (userEingabe.equalsIgnoreCase("a")) {
                 poiAbfahren();
@@ -79,7 +79,7 @@ public class Spielfeld {
      * Diese werden durch <code>checkGrenzen</code> geprüft und dann in <code>userPoi</code> gespeichert.
      */
     private static Punkt[] punktEingabe() {
-        int punktAnzahl = eingabeIstZahl("Anzahl der Punkte: "); // Nutzer gibt an wie viele Punkte er erstellen möchte
+        int punktAnzahl = eingabeIstZahl("Wieviele Punkte sollen abgefahren werden? "); // Nutzer gibt an wie viele Punkte er erstellen möchte
         userPoi = new Punkt[punktAnzahl]; // werden hier gespeichert!
 
         for (int i = 0; i < punktAnzahl; i++) {
@@ -122,7 +122,7 @@ public class Spielfeld {
                 zahl = Integer.parseInt(eingabe); // überprüft ob Input ganzzahlig ist
                 isZahl = true;
             } catch (NumberFormatException numberFormatException) {
-                System.out.println("Nur ganze Zahlen eingeben!");
+                System.out.println("Bitte geben Sie nur ganze Zahlen ein!");
                 System.out.print(bezeichnung); // zeigt nochmal was der Nutzer eingeben soll
                 isZahl = false;
             }
@@ -141,11 +141,11 @@ public class Spielfeld {
      */
     private static boolean checkGrenzen(int x, int y) {
         if (x < 0 || x > LAENGE) {
-            System.out.println("x-Wert liegt ausehalb des engegebenen Bereichs (0 <= x <= " + LAENGE + ")");
+            System.out.println("x-Wert liegt außerhalb des angegebenen Bereichs (0 <= x <= " + LAENGE + ")");
             return false;
         }
         if (y < 0 || y > BREITE) {
-            System.out.println("y-Wert liegt ausehalb des angegebenen Bereichs (0 <= y <= " + BREITE + ")");
+            System.out.println("y-Wert liegt außerhalb des angegebenen Bereichs (0 <= y <= " + BREITE + ")");
             return false;
         } else {
             return true;
@@ -213,8 +213,8 @@ public class Spielfeld {
             int dx = naechsterPunkt.getX() - roboterMittelpunkt.getX(); // Verschiebevektor um Roboter zu bewegen
             int dy = naechsterPunkt.getY() - roboterMittelpunkt.getY();
 
-            System.out.println("---\nnächster Punkt = Punkt (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
-                    ")\nVerschiebungsvektor: (" + dx + ", " + dy + ") = " +
+            System.out.println("---\n nächster Punkt = Punkt (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
+                    ")\n Verschiebungsvektor: (" + dx + ", " + dy + ") = " +
                     roboterMittelpunkt.getAbstand(naechsterPunkt));
 
             roboterMittelpunkt.bewegeUm(dx, dy);
@@ -318,7 +318,6 @@ public class Spielfeld {
         ArrayList<Rechteck> hindernisliste = new ArrayList<>();
 
         // Nutzer wird nach Angaben gefragt, die in 'eingabeIstZahl' auf korrektes Format geprüft wird
-        System.out.print("Anzahl der Hindernisse: ");
         int hindernisseAnzahl = eingabeIstZahl("Anzahl der Hindernisse: ");
 
         while (hindernisliste.size() < hindernisseAnzahl && zaehlerUeberlappungen < maxUeberlappungen) {
@@ -430,16 +429,6 @@ public class Spielfeld {
         if (stuck) {
             System.out.println("Bin Stuck!");
         }
-    }
-
-    /**
-     * zeichnet Hindernisse und Roboter auf Leinwand
-     *
-     * @param hindernisse <code>ArrayList</code>, die Hindernisse enthält
-     */
-    private static void zeichnen(ArrayList<Rechteck> hindernisse, Punkt[] poi) {
-        leinwand.zeichnen(hindernisse, poi, roboter);
-        leinwand.warten(5);
     }
 
     /**

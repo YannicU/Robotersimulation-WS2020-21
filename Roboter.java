@@ -67,8 +67,10 @@ public class Roboter extends Kreis {
     void spracherkennung() {
         String userEingabe = "";
         System.out.println("\n-----Roboter Spracherkennung: gestartet-----" +
-                "\n 'stichwörter' - zeigt valide Sitchwörter an" +
-                "\n 'ende' - beendet die Spracherkennung");
+                "\n 'Hilfe' - zeigt valide Sitchwörter an" +
+                "\n 'ende' - beendet die Spracherkennung" +
+                "\n" +
+                "\n Stellen Sie mir eine Frage!");
         while (!userEingabe.equalsIgnoreCase("ende")) {
             System.out.print("> ");
             userEingabe = SCANNER.nextLine().toUpperCase().replaceAll("[/!?)*(.,<>+-]", "");
