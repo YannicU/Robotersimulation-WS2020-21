@@ -441,4 +441,14 @@ public class Spielfeld {
         leinwand.zeichnen(hindernisse, poi, roboter);
         leinwand.warten(5);
     }
+
+    /**
+     * zeichnet Hindernisse und Roboter auf Leinwand
+     *
+     * @param hindernisse <code>ArrayList</code>, die Hindernisse enthält
+     */
+    private static void zeichnen(ArrayList<Rechteck> hindernisse, Punkt[] poi) {
+        leinwand.zeichnen(hindernisse, poi, roboter);
+        leinwand.warten(5);
+    }
 }
