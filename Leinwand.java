@@ -19,7 +19,6 @@ public class Leinwand {
 
         FENSTER.setContentPane(ZEICHENFLAECHE);
         FENSTER.setTitle(titel);
-        FENSTER.setLocation(-1920 / 2, 15);
         ZEICHENFLAECHE.setPreferredSize(new Dimension(laenge, breite));
         FENSTER.setSize(laenge + 275, breite + 300);
 //        FENSTER.pack();

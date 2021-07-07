@@ -4,8 +4,8 @@ import java.util.*;
 /**
  * Beschreiben Sie hier die Klasse Spielfeld.
  *
- * @author Yannic Yu
- * @version 23.05.2021
+ * @author Yannic Yu, Vivian Bär
+ * @version 23.05.2021, 06. 07. 2021
  */
 
 public class Spielfeld {
@@ -358,6 +358,9 @@ public class Spielfeld {
                 }
             }
             zeichnen(hindernisse, roboter);
+        }
+        if (stuck) {
+            System.out.println("Bin Stuck!");
         }
     }
 }
