@@ -1,42 +1,74 @@
 import java.awt.*;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Scanner;
+import java.util.*;
 
 /**
- * Beschreiben Sie hier die Klasse Roboter.
+ * Stellt Roboter auf Spielfeld dar.
+ * Erbt die Eigenschaften der Klasse Kreis.
  *
- * @author Yannic Yu
+ * @author Vivian Bär, Yannic Yu
  * @version 23.05.2021
  */
 
 public class Roboter extends Kreis {
     private final Scanner SCANNER = new Scanner(System.in);
 
+    /**
+     * 1. Konstruktor der Klasse Roboter
+     */
     Roboter() {
     }
 
+    /**
+     * 2. Konstruktor der Klasser Roboter
+     *
+     * @param position    Objekt der Klasse Punkt das die x-y-Koordinaten besitzt
+     * @param durchmesser Durchmesser des Roboters
+     * @param bezeichnung Bezeichnung des Roboters
+     * @param farbe       Farbe des Roboters
+     */
     Roboter(Punkt position, int durchmesser, String bezeichnung, Color farbe) {
         super(position, durchmesser, bezeichnung, farbe);
     }
 
-    public boolean imSpielfeld(int laenge, int breite) {
-        return (0 < super.minX() && super.maxX() < laenge) &&
-                (0 < super.minY() && super.maxY() < breite);
+    /**
+     * überprüft ob sich der Roboter innerhalb gegebener Grenzen eines Spielfeldes befindet
+     *
+     * @return <code>true</code>, solange er innerhalb ist
+     */
+    public boolean imSpielfeld() {
+        return (0 < super.minX() && super.maxX() < Spielfeld.getLaenge()) &&
+                (0 < super.maxY() && super.minY() < Spielfeld.getBreite());
     }
 
+    /**
+     * gibt an, ob sich der Roboter innerhalb der min. und max. x-Werte einer Figur befindet
+     *
+     * @param figur die überprüfende Figur
+     * @return <code>true</code>, wenn Roboter innerhalb
+     */
     public boolean zwischenX(Figur figur) {
         return figur.minX() <= super.maxX() && super.minX() <= figur.maxX();
     }
 
+    /**
+     * gibt an, ob sich der Roboter innerhalb der min. und max. y-Werte einer Figur befindet
+     *
+     * @param figur die überprüfende Figur
+     * @return <code>true</code>, wenn Roboter innerhalb
+     */
     public boolean zwischenY(Figur figur) {
         return figur.minY() <= super.maxY() && super.minY() <= figur.maxY();
     }
 
+    /**
+     * Methode die eine User-Eingabe auf Stichwörter überprüft und gegebenenfalls eine vorgegebene
+     * Antwort auf der Konsole zurückgibt.
+     */
     void spracherkennung() {
         String userEingabe = "";
-        System.out.println("\nCooler Roboter 1: Home\n" +
-                "um 'spracherkennung' zu beenden: 'Ende'");
+        System.out.println("\n-----Roboter Spracherkennung: gestartet-----" +
+                "\n 'stichwörter' - zeigt valide Sitchwörter an" +
+                "\n 'ende' - beendet die Spracherkennung");
         while (!userEingabe.equalsIgnoreCase("ende")) {
             System.out.print("> ");
             userEingabe = SCANNER.nextLine().toUpperCase().replaceAll("[/!?)*(.,<>+-]", "");
@@ -56,42 +88,27 @@ public class Roboter extends Kreis {
                                 System.out.println("Mein Radius: " + getDurchmesser() / 2);
                                 break;
                             case NAME:
-                            case NAMEN:
                             case BEZEICHNUNG:
                                 System.out.println("Meine Bezeichnung: " + getBezeichnung());
                                 break;
                             case FARBE:
                                 System.out.println("Meine Farbe: " + getColor());
                                 break;
-
+                            case HILFE:
                             case STICHWORT:
-                            case STICHWOERTER:
-                            case HELP:
-                                int i = 1;
-                                System.out.println("Stichwörter:");
-                                for (Stichwort stichwort : EnumSet.allOf(Stichwort.class)) {
-                                    System.out.println(i + ". " + stichwort);
-                                    i++;
-                                }
+                                System.out.println("valide Stichwörter:" +
+                                        "\n- Name, Bezeichnung" +
+                                        "\n- Position, Koordinaten, Punkt" +
+                                        "\n- Durchmesser, Radius" +
+                                        "\n- Farbe" +
+                                        "\n- Hilfe, Stichwort" +
+                                        "\n- Ende");
                                 break;
-
-                            case DANKE:
-                                System.out.println("Kein ding");
-                                break;
-                            case GERNE:
-                                System.out.println("Wow! So höflich");
-                                break;
-                            case HALLO:
-                            case TSCHUESS:
-                            case CIAO:
-                                System.out.println("Sers!");
-                                break;
-                            case NICHT:
-                                System.out.println("Okay..");
-                                break;
+                            case ENDE:
+                                System.out.println("-----Roboter Spracherkennung: beendet-----");
                         }
                     } catch (IllegalArgumentException illegalArgumentException) {
-                        System.out.println("...Sorry, " + wort + " hab ich nicht verstanden :(");
+                        System.out.println("...Tut mir leid, " + wort + " hab ich nicht verstanden :(");
                     }
                 }
             }
@@ -100,24 +117,16 @@ public class Roboter extends Kreis {
     }
 
     enum Stichwort {
+        NAME,
+        BEZEICHNUNG,
         POSITION,
         KOORDINATEN,
         PUNKT,
         DURCHMESSER,
         RADIUS,
-        NAME,
-        NAMEN,
-        BEZEICHNUNG,
         FARBE,
-
-        DANKE,
-        GERNE,
-        HALLO,
-        TSCHUESS,
-        NICHT,
-        CIAO,
+        HILFE,
         STICHWORT,
-        STICHWOERTER,
-        HELP,
+        ENDE,
     }
 }

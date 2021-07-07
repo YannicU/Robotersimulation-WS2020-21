@@ -1,9 +1,10 @@
 import java.awt.*;
 
 /**
- * Beschreiben Sie hier die Klasse Rechteck.
+ * Erzeugt Rechtecke die als Hindernisse gesehen werden.
+ * Erbt die Eigenschaften der Klasse Figur.
  *
- * @author Yannic Yu, Vivian Bär
+ * @author Vivian Bär, Yannic Yu
  * @version 17.05.2021
  */
 
@@ -11,9 +12,22 @@ public class Rechteck extends Figur {
     private int breite;
     private int laenge;
 
+    /**
+     * 1. Konstruktor der Klasse Rechteck
+     */
     Rechteck() {
+        super();
     }
 
+    /**
+     * 2. Konstruktor der Klasse Rechteck
+     *
+     * @param position    Objekt der Klasse Punkt das die x-y-Koordinaten besitzt
+     * @param laenge      Länge des Rechteckes (in x-Richtung)
+     * @param breite      Breite des Rechteckes (in y-Richtung)
+     * @param bezeichnung Bezeichnung des Rechtecks
+     * @param farbe       Farbe des Rechtecks
+     */
     Rechteck(Punkt position, int laenge, int breite, String bezeichnung, Color farbe) {
         super(position, bezeichnung, farbe); // ruft den Konstruktor der Superklasse "Figur"
         this.laenge = laenge;
@@ -44,30 +58,14 @@ public class Rechteck extends Figur {
         return breite;
     }
 
+    /**
+     * Ausgabe der Daten des Rechtecks auf der Konsole
+     */
     public void ausgabeAttribute() {
         System.out.println("Position: x = " + getX() + ", y = " + getY() +
                 "\nBreite: " + getBreite() + " px" +
                 "\nLänge: " + getLaenge() + " px" +
                 "\nBezeichnung: " + getBezeichnung() +
                 "\nColor: " + getColor());
-    }
-
-    public boolean ueberlappt(Rechteck r) {
-        // aktuelles Rechteck = R1
-        // Rechteck r = R2
-        int dx = r.getX() - getX(); // Abstandsvektor x-Richtung
-        int dy = r.getY() - getY(); // Abstandsvektor y-Richtung
-
-        /* So kann man sich den code auch vorstellen:
-        if (dx <= laenge && dx >= -r.getLaenge()) {
-            if (dy <= breite && dy >= -r.getBreite()) {
-                return true;
-            } else return false;
-        } else return false;
-         */
-
-        // längeR1 <= dx <= -längeR2, breiteR1 <= dy <= -breiteR2 ... gibt wahr oder falsch aus
-        // wahr -> Überlappung, falsch -> keine Überlappung
-        return laenge >= dx && dx >= -r.getLaenge() && breite >= dy && dy >= -r.getBreite();
     }
 }
