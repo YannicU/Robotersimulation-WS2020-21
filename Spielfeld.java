@@ -9,12 +9,13 @@ import java.util.*;
  */
 
 public class Spielfeld {
-    private static final int LAENGE = 700; // x-Richtung
-    private static final int BREITE = 700; // y-Richtung
+    private static final int LAENGE = 1000; // x-Richtung
+    private static final int BREITE = 1000; // y-Richtung
     private static final Scanner SCANNER = new Scanner(System.in);
     private static final Random ZUFALLSGENERATOR = new Random();
     private static final int ROBOTER_DURCHMESSER = 10;
-    private static final int DELAY = 5;
+    private static final Punkt ROBOTER_STARTPOSITION = new Punkt(1, 1);
+    private static final int DELAY = 2;
 
     private static Roboter roboter;
     private static Leinwand leinwand;
@@ -23,7 +24,7 @@ public class Spielfeld {
      * Konstruktor der Klasse Spielfeld
      */
     Spielfeld() {
-        roboter = new Roboter(new Punkt(1, 1), ROBOTER_DURCHMESSER, "Roboter", Color.red);
+        roboter = new Roboter(new Punkt(ROBOTER_STARTPOSITION.getX(), ROBOTER_STARTPOSITION.getY()), ROBOTER_DURCHMESSER, "Roboter", Color.red);
         leinwand = Leinwand.getLeinwand("Robotersimulation", LAENGE, BREITE, Color.WHITE);
     }
 
@@ -60,6 +61,10 @@ public class Spielfeld {
 
     public static int getBreite() {
         return BREITE;
+    }
+
+    private static void resetRoboter() {
+        roboter.setPos(ROBOTER_STARTPOSITION.getX(), ROBOTER_STARTPOSITION.getY());
     }
 
     /*
@@ -217,7 +222,7 @@ public class Spielfeld {
             poiSortiert = poiSortieren(poiSortiert); // um mit neuen Roboterkoordinaten den nächsten näheren Punkt zu finden
             System.out.println(" Neuer Ausganspunkt: (" + roboter.getMittelpunkt().getX() + ", " + roboter.getMittelpunkt().getY() + ")\n----------");
         }
-        roboter.setPos(1, 1); // Setzt roboter an ausgangsposition zurück
+        resetRoboter(); // Setzt roboter an ausgangsposition zurück
         return poiAbgefahren;
     }
 
@@ -228,16 +233,16 @@ public class Spielfeld {
      * ihrem kürzestem Abstand sortiert abföhrt.
      */
     private static void poiZeichnen() {
-        roboter.setPos(1, 1);
+        resetRoboter();
         Punkt[] userPoi = punktEingabe();
         Punkt[] poiAbgefahren = poiAbfahren(userPoi);
         Punkt ausgangspunkt = new Punkt(roboter.getMittelpunkt().getX(), roboter.getMittelpunkt().getY()); //Mittelpunkt des Roboters
         zeichnen(null, poiAbgefahren);
 
-//        System.out.println("POI:");
-//        for (Punkt poi : poiAbgefahren) {
-//            poi.ausgabeAttribute();
-//        }
+        System.out.println("POI:");
+        for (Punkt poi : poiAbgefahren) {
+            poi.ausgabeAttribute();
+        }
         for (Punkt poi : poiAbgefahren) {
             double abstand = ausgangspunkt.getAbstand(poi);
             boolean negativeX = false;
@@ -255,13 +260,13 @@ public class Spielfeld {
             } else if (poi.getX() == ausgangspunkt.getX() && poi.getY() < ausgangspunkt.getY()) {
                 winkel = (3 * Math.PI) / 2;
             }
-//            roboter.getPos().ausgabeAttribute();
-//            System.out.print("AUSGANGSPUNKT: ");
-//            ausgangspunkt.ausgabeAttribute();
-//            System.out.print("koordinaten poi: ");
-//            poi.ausgabeAttribute();
-//            System.out.println("abstand: " + abstand);
-//            System.out.println("winkel: " + Math.toDegrees(winkel));
+            roboter.getPos().ausgabeAttribute();
+            System.out.print("AUSGANGSPUNKT: ");
+            ausgangspunkt.ausgabeAttribute();
+            System.out.print("koordinaten poi: ");
+            poi.ausgabeAttribute();
+            System.out.println("abstand: " + abstand);
+            System.out.println("winkel: " + Math.toDegrees(winkel));
             double j = 0;
             while (j <= abstand && roboter.imSpielfeld()) {
                 Punkt linienpunkt; // ein Punkt der sich auf der Linie zum nächsten Punkt befindet
@@ -272,7 +277,6 @@ public class Spielfeld {
                 }
                 roboter.setMittelpunkt(linienpunkt);
                 j++;
-                System.out.println(j);
                 if (j > abstand) { // da die Double Werte nicht genau die Integer Werte annehmen können
                     roboter.setMittelpunkt(poi);
                     break;
@@ -373,7 +377,7 @@ public class Spielfeld {
      */
     private static void hindernisseUmfahren() {
         ArrayList<Rechteck> hindernisse = hindernislisteErzeugen();
-        roboter.setPos(1, 1); // setzt den Roboter an die Startposition zurück
+        resetRoboter(); // setzt den Roboter an die Startposition zurück
         int dx = 1;
         int dy = 1;
         boolean stuck = false;

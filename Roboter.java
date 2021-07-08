@@ -36,8 +36,8 @@ public class Roboter extends Kreis {
      * @return <code>true</code>, solange er innerhalb ist
      */
     public boolean imSpielfeld() {
-        return (0 < super.minX() && super.maxX() < Spielfeld.getLaenge()) &&
-                (0 < super.minY() && super.maxY() < Spielfeld.getBreite());
+        return (0 < minX() && maxX() < Spielfeld.getLaenge()) &&
+                (0 < minY() && maxY() < Spielfeld.getBreite());
     }
 
     public boolean anWandX() {
@@ -55,7 +55,7 @@ public class Roboter extends Kreis {
      * @return <code>true</code>, wenn Roboter innerhalb
      */
     public boolean zwischenX(Figur figur) {
-        return figur.minX() <= super.maxX() && super.minX() <= figur.maxX();
+        return figur.minX() <= maxX() && minX() <= figur.maxX();
     }
 
     /**
@@ -65,7 +65,7 @@ public class Roboter extends Kreis {
      * @return <code>true</code>, wenn Roboter innerhalb
      */
     public boolean zwischenY(Figur figur) {
-        return figur.minY() <= super.maxY() && super.minY() <= figur.maxY();
+        return figur.minY() <= maxY() && minY() <= figur.maxY();
     }
 
     /**
