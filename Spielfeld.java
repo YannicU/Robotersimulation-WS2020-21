@@ -133,7 +133,8 @@ public class Spielfeld {
     /**
      * Methode checkGrenzen
      * <p>
-     * Überprüft ob die eingegebenen Koordinaten auch innerhalb des Spielfeldes liegen.
+     * Überprüft ob die eingegebenen Koordinaten auch innerhalb des Spielfeldes liegen und ob der Roboter
+     * sie erreichen kann.
      *
      * @param x Wert von x
      * @param y Wert von y
