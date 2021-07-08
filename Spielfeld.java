@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * Hauptklasse des Projektes, in der alles zusammen kommt und abspielt.
+ * Hauptklasse des Projektes, in der alles zusammenkommt und abspielt.
  *
  * @author Vivian Bär, Yannic Yu
  * @version 06.07.2021
@@ -135,14 +135,16 @@ public class Spielfeld {
      * @return <code>true</code>, wenn x und y innerhalb der Grenzen des Spielfeldes liegt
      */
     private static boolean checkGrenzen(int x, int y) {
-        int grenzeX = LAENGE - (roboter.getDurchmesser() / 2);
-        int grenzeY = BREITE - (roboter.getDurchmesser() / 2);
-        if (x < 0 || x > grenzeX) {
-            System.out.println("x-Wert liegt außerhalb des angegebenen Bereichs (0 <= x <= " + grenzeX + ")");
+        int minX = 6;
+        int minY = 6;
+        int maxX = LAENGE - (roboter.getDurchmesser() / 2) - 1;
+        int maxY = BREITE - (roboter.getDurchmesser() / 2) - 1;
+        if (x < minX || x > maxX) {
+            System.out.println("x-Wert liegt außerhalb des angegebenen Bereichs (" + minX + " <= x <= " + maxX + ")");
             return false;
         }
-        if (y < 0 || y > grenzeY) {
-            System.out.println("x-Wert liegt außerhalb des angegebenen Bereichs (0 <= y <= " + grenzeY + ")");
+        if (y < minY || y > maxY) {
+            System.out.println("x-Wert liegt außerhalb des angegebenen Bereichs (" + minY + " <= y <= " + maxY + ")");
             return false;
         } else {
             return true;
@@ -208,7 +210,7 @@ public class Spielfeld {
             }
             int dx = naechsterPunkt.getX() - roboterMittelpunkt.getX(); // um Roboter zu bewegen
             int dy = naechsterPunkt.getY() - roboterMittelpunkt.getY();
-            System.out.println("---\n nächster Punkt = Punkt (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
+            System.out.println("\n nächster Punkt = Punkt (" + naechsterPunkt.getX() + ", " + naechsterPunkt.getY() +
                     ")\n Verschiebungsvektor: (" + dx + ", " + dy + ") = " +
                     roboterMittelpunkt.getAbstand(naechsterPunkt));
             roboter.bewegeUm(dx, dy);
@@ -270,6 +272,7 @@ public class Spielfeld {
                 }
                 roboter.setMittelpunkt(linienpunkt);
                 j++;
+                System.out.println(j);
                 if (j > abstand) { // da die Double Werte nicht genau die Integer Werte annehmen können
                     roboter.setMittelpunkt(poi);
                     break;
