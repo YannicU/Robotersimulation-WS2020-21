@@ -120,13 +120,8 @@ public class Roboter extends Kreis {
                     } catch (IllegalArgumentException illegalArgumentException) {
                         System.out.println("...Tut mir leid, '" + wort + "' hab ich nicht verstanden :(");
                     }
-                } else {
-                    System.out.println("...Tut mir leid, das habe ich leider nicht verstanden." +
-                            "\n 'hilfe' - zeigt valide Sitchwörter an" +
-                            "\n 'ende' - beendet die Spracherkennung");
                 }
             }
-
         }
     }
 
