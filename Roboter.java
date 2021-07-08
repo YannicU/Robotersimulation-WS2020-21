@@ -40,6 +40,14 @@ public class Roboter extends Kreis {
                 (0 < super.maxY() && super.minY() < Spielfeld.getBreite());
     }
 
+    public boolean anWandX() {
+        return maxX() + 1 == Spielfeld.getLaenge() && maxY() + 1 != Spielfeld.getBreite();
+    }
+
+    public boolean anWandY() {
+        return maxY() + 1 == Spielfeld.getBreite() && maxX() + 1 != Spielfeld.getLaenge();
+    }
+
     /**
      * gibt an, ob sich der Roboter innerhalb der min. und max. x-Werte einer Figur befindet
      *
@@ -67,8 +75,9 @@ public class Roboter extends Kreis {
     void spracherkennung() {
         String userEingabe = "";
         System.out.println("\n-----Roboter Spracherkennung: gestartet-----" +
-                "\n 'stichwörter' - zeigt valide Sitchwörter an" +
-                "\n 'ende' - beendet die Spracherkennung");
+                "\n 'hilfe' - zeigt valide Sitchwörter an" +
+                "\n 'ende' - beendet die Spracherkennung" +
+                "\n Stellen Sie mir eine Frage!");
         while (!userEingabe.equalsIgnoreCase("ende")) {
             System.out.print("> ");
             userEingabe = SCANNER.nextLine().toUpperCase().replaceAll("[/!?)*(.,<>+-]", "");
@@ -92,7 +101,8 @@ public class Roboter extends Kreis {
                                 System.out.println("Meine Bezeichnung: " + getBezeichnung());
                                 break;
                             case FARBE:
-                                System.out.println("Meine Farbe: " + getColor());
+                                System.out.println("Meine Farbe: r=" + getColor().getRed() + ", g=" +
+                                        getColor().getGreen() + ", b=" + getColor().getBlue());
                                 break;
                             case HILFE:
                             case STICHWORT:
@@ -108,8 +118,12 @@ public class Roboter extends Kreis {
                                 System.out.println("-----Roboter Spracherkennung: beendet-----");
                         }
                     } catch (IllegalArgumentException illegalArgumentException) {
-                        System.out.println("...Tut mir leid, " + wort + " hab ich nicht verstanden :(");
+                        System.out.println("...Tut mir leid, '" + wort + "' hab ich nicht verstanden :(");
                     }
+                } else {
+                    System.out.println("...Tut mir leid, das habe ich leider nicht verstanden." +
+                            "\n 'hilfe' - zeigt valide Sitchwörter an" +
+                            "\n 'ende' - beendet die Spracherkennung");
                 }
             }
 

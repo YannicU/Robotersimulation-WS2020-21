@@ -44,14 +44,6 @@ public class Punkt {
     }
 
     /**
-     * Gibt einen Punkt mit den x und y Koordinaten zurück
-     * @return Punkt
-     */
-    public Punkt getXY() {
-        return new Punkt(getX(), getY());
-    }
-
-    /**
      * Setzt die x- und y-Werte des Punktes
      *
      * @param x Wert von x

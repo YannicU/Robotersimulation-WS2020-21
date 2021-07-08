@@ -3,23 +3,23 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Beschreiben Sie hier die Klasse Leinwand.
+ * Erstellt eine Leinwand auf der die Zeichenfläche angezeigt wird.
  *
  * @author Vivian Bär, Yannic Yu
  * @version 23.05.2021
  */
 
 public class Leinwand {
-    private final JFrame FENSTER;
-    public Zeichenflaeche zeichenflaeche;
     private static Leinwand leinwand;
     private static Color hgFarbe;
+    private final JFrame FENSTER;
+    public Zeichenflaeche zeichenflaeche;
 
     /**
      * Konstruktor der Klasse Leinwand
      *
-     * @param titel Titel des Fensters
-     * @param laenge Lönge des Fensters (width)
+     * @param titel  Titel des Fensters
+     * @param laenge Länge des Fensters (width)
      * @param breite Breite des Fensters (hight)
      */
     Leinwand(String titel, int laenge, int breite, Color hgFarbe) {
@@ -27,12 +27,10 @@ public class Leinwand {
         FENSTER = new JFrame();
         FENSTER.getContentPane().setBackground(hgFarbe);
         FENSTER.setTitle(titel);
-        FENSTER.setSize(laenge + 275, breite + 300);
+        FENSTER.setSize(laenge + 17, breite + 40);
         FENSTER.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         FENSTER.setResizable(false);
         FENSTER.setVisible(false);
-
-//        zeichenflaeche.setPreferredSize(new Dimension(laenge, breite));
     }
 
     public static Leinwand getLeinwand(String titel, int laenge, int breite, Color hgFarbe) {

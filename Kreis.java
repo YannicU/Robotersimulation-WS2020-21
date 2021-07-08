@@ -51,10 +51,6 @@ public class Kreis extends Figur {
         return new Punkt(getX() + (getDurchmesser() / 2), getY() + (getDurchmesser() / 2));
     }
 
-    public void setMittelpunkt(int x, int y) {
-        setPos(x - (getDurchmesser() / 2), y - (getDurchmesser() / 2));
-    }
-
     public void setMittelpunkt(Punkt punkt) {
         int x = punkt.getX() - (getDurchmesser() / 2);
         int y = punkt.getY() - (getDurchmesser() / 2);

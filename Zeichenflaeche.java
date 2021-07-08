@@ -2,8 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Hier können verschiedene Grafiken und Figuren dargestellt werden.
+ *
+ * @author Vivian Bär, Yannic Yu
+ * @version 07.07.2021
+ */
+
 public class Zeichenflaeche extends JPanel {
-//    private static Zeichenflaeche zeichenflaeche;
     private ArrayList<Rechteck> hindernisse;
     private Roboter roboter;
     private Punkt[] poi;
@@ -13,13 +19,6 @@ public class Zeichenflaeche extends JPanel {
      */
     public Zeichenflaeche() {
     }
-
-//    public static Zeichenflaeche getZeichenflaeche() {
-//        if (zeichenflaeche == null) {
-//            zeichenflaeche = new Zeichenflaeche();
-//        }
-//        return zeichenflaeche;
-//    }
 
     /**
      * Zeichnet die Figuren
@@ -39,7 +38,7 @@ public class Zeichenflaeche extends JPanel {
                 g.fillRect(h.getX(), h.getY(), h.getLaenge(), h.getBreite());
                 g.setColor(Color.BLACK);
                 g.drawRect(h.getX(), h.getY(), h.getLaenge(), h.getBreite());
-                g.drawString(h.getBezeichnung(), h.getX(), h.getY());
+//                g.drawString(h.getBezeichnung(), h.getX(), h.getY());
             }
         }
         if (poi != null) {
@@ -60,13 +59,6 @@ public class Zeichenflaeche extends JPanel {
         this.hindernisse = figuren;
         this.roboter = roboter;
         this.poi = poi;
-        repaint();
-    }
-
-    public void clearZeichenflaeche() {
-        hindernisse = null;
-        roboter = null;
-        poi = null;
         repaint();
     }
 }
