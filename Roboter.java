@@ -37,7 +37,7 @@ public class Roboter extends Kreis {
      */
     public boolean imSpielfeld() {
         return (0 < super.minX() && super.maxX() < Spielfeld.getLaenge()) &&
-                (0 < super.maxY() && super.minY() < Spielfeld.getBreite());
+                (0 < super.minY() && super.maxY() < Spielfeld.getBreite());
     }
 
     public boolean anWandX() {
