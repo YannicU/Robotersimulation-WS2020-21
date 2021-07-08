@@ -20,7 +20,7 @@ public class Leinwand {
      *
      * @param titel  Titel des Fensters
      * @param laenge Länge des Fensters (width)
-     * @param breite Breite des Fensters (hight)
+     * @param breite Breite des Fensters (height)
      */
     Leinwand(String titel, int laenge, int breite, Color hgFarbe) {
         Leinwand.hgFarbe = hgFarbe;
