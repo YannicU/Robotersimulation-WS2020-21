@@ -140,8 +140,8 @@ public class Spielfeld {
      * @return <code>true</code>, wenn x und y innerhalb der Grenzen des Spielfeldes liegt
      */
     private static boolean checkGrenzen(int x, int y) {
-        int minX = 6;
-        int minY = 6;
+        int minX = roboter.getDurchmesser() / 2;
+        int minY = roboter.getDurchmesser() / 2;
         int maxX = LAENGE - (roboter.getDurchmesser() / 2) - 1;
         int maxY = BREITE - (roboter.getDurchmesser() / 2) - 1;
         if (x < minX || x > maxX) {
