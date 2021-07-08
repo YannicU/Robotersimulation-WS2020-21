@@ -7,8 +7,8 @@ zumindest die folgenden Angaben umfassen:
 ------------------------------------------------------------------------
 
 PROJEKTBEZEICHNUNG: Robotersimulation
-PROJEKTZWECK: Cool sein
+PROJEKTZWECK: 
 VERSION oder DATUM: 26.04.2021
-WIE IST DAS PROJEKT ZU STARTEN: mit coolheit
-AUTOR(EN): Yannic
-BENUTZERHINWEISE: kann Spuren enthalten
+WIE IST DAS PROJEKT ZU STARTEN:
+AUTOR(EN): Vivian Bär, Yannic Yu
+BENUTZERHINWEISE:
