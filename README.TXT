@@ -7,8 +7,8 @@ zumindest die folgenden Angaben umfassen:
 ------------------------------------------------------------------------
 
 PROJEKTBEZEICHNUNG: Robotersimulation
-PROJEKTZWECK: 
-VERSION oder DATUM: 26.04.2021
-WIE IST DAS PROJEKT ZU STARTEN:
+PROJEKTZWECK: Softwarepraktikum, Informatik 2
+VERSION oder DATUM: 07.07.2021
+WIE IST DAS PROJEKT ZU STARTEN: Rechtsklick auf die Klasse "Spielfeld". Dann auf "void main(String[] args)" klicken.
 AUTOR(EN): Vivian Bär, Yannic Yu
 BENUTZERHINWEISE:
