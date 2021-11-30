@@ -6,7 +6,7 @@ Informatik 2 an der Technischen Universität Dresden geschrieben.
 ### Disclaimer
   Wir wurden an verschiedenen Tagen geprüft und nur einer von uns hat bestanden. 
   Bei dem anderen gab es das Argument, dass das Programm schwere Fehler aufweist. 
-  Wir wissen jetzt aber auch nicht welche Fehler gemeint wurden, 
+  Wir wissen jetzt aber auch nicht welche Fehler gemeint waren, 
   weil er es dann auch nicht weiter erklärt hat.
         
 ### Randinformationen
