@@ -17,4 +17,3 @@ _Geprüft von_: Cornelia Wulf, Michael Willig
 
 _Wie ist das Projekt zu starten (BlueJ)_: Rechtsklick auf die Klasse "Spielfeld". Dann auf "void main(String[] args)" klicken.\
 _Autoren_: Vivian Bär, Yannic Yu\
-_Benutzerhinweise_: kann Spuren von Salz enthalten
